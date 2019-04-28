@@ -109,7 +109,7 @@ namespace AutoPuTTY.Utils
 
         public static void LaunchICMPPing(String serverIP)
         {
-            string strCmdText = "/C ping " + serverIP + " &pause";
+            string strCmdText = "/C ping -t " + serverIP + " &pause";
             Process.Start("CMD.exe", strCmdText);
         }
 
