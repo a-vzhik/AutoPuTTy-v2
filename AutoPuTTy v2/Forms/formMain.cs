@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
@@ -30,8 +31,8 @@ namespace AutoPuTTY.Forms
         public static formOptions optionsForm;
         public static formMain CurrentFormMain;
 
-        public string[] types = { "SSH", StringResources.formMain_cbType_SelectedIndexChanged_Remote_Desktop, "VNC", "WinSCP (SCP)", "WinSCP (SFTP)", "WinSCP (FTP)", "Telnet", "Plink"};
-        public string[] Types;
+        public List<string> types = new List<string>();
+        public List<string> Types = new List<string>();
 
         private string lastState = "normal";
 
@@ -64,6 +65,11 @@ namespace AutoPuTTY.Forms
 
         public formMain(bool full)
         {
+            foreach (ConnectionType value in Enum.GetValues(typeof(ConnectionType)))
+            {
+                types.Add(value.ConvertToString());
+            }
+
             XmlHelper = new XmlHelper();
             Cryptor = new CryptHelper();
             OtherHelper = new OtherHelper();
@@ -71,7 +77,7 @@ namespace AutoPuTTY.Forms
             CurrentFormMain = this;
 
             //clone types array to have a sorted version
-            Types = (string[])types.Clone();
+            Types = new List<string>(types);
             string configPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase)?.Replace("file:\\", "");
             string userPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
 
@@ -180,7 +186,7 @@ namespace AutoPuTTY.Forms
                 string newServerPort = textBox1.Text.Trim();
                 string newServerUsername = tbServerUser.Text.Trim();
                 string newServerPassword = tbServerPass.Text.Trim();
-                string newServerType = Array.IndexOf(types, cbType.Text).ToString();
+                string newServerType = types.IndexOf(cbType.Text).ToString();
                 bool newServerChecks = cbAutoCheck.Checked;
 
                 ServerElement server = new ServerElement(newServerName, newServerHost, newServerPort, newServerUsername, newServerPassword, newServerType, newServerChecks);
@@ -208,7 +214,7 @@ namespace AutoPuTTY.Forms
                 string serverPort = textBox1.Text.Trim();
                 string serverUsername = tbServerUser.Text.Trim();
                 string serverPassword = tbServerPass.Text.Trim();
-                string serverType = Array.IndexOf(types, cbType.Text).ToString();
+                string serverType = types.IndexOf(cbType.Text).ToString();
                 bool serverChecks = cbAutoCheck.Checked;
 
                 xmlHelper.addServer(groupName, serverName, serverHostname, serverPort,
@@ -653,7 +659,7 @@ namespace AutoPuTTY.Forms
                 textBox1.Text = currentServer.Port;
                 tbServerUser.Text = currentServer.Username;
                 tbServerPass.Text = currentServer.Password;
-                cbType.SelectedIndex = Array.IndexOf(Types, types[Convert.ToInt32(currentServer.Type)]);
+                cbType.SelectedIndex = Types.IndexOf(types[Convert.ToInt32(currentServer.Type)]);
                 cbAutoCheck.Checked = currentServer.AutoChecks;
 
                 bServerDelete.Enabled = true;

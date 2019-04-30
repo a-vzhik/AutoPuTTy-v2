@@ -9,6 +9,12 @@
         Ftp,
         Sftp,
         Telnet,
-        Plink
+        Plink, 
+        RAdmin,
+        AmmyAdmin, 
+        TeamViewer, 
+        QuasarMsc, 
+        FileZillaFtp, 
+        FarNetbox
     }
 }

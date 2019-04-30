@@ -17,7 +17,7 @@
     <GenerateManifests>true</GenerateManifests>
     <TargetZone>LocalIntranet</TargetZone>
     <SignManifests>false</SignManifests>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
@@ -85,6 +85,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Forms\Options\FarNetboxOptionsViewModel.cs" />
+    <Compile Include="Forms\Options\AmmyAdminOptionsViewModel.cs" />
+    <Compile Include="Forms\Options\CommonOptionsViewModel.cs" />
+    <Compile Include="Forms\Options\CommonOptionsView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Options\CommonOptionsView.Designer.cs">
+      <DependentUpon>CommonOptionsView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Options\FileZillaOptionsViewModel.cs" />
+    <Compile Include="Forms\Options\RAdminOptionsViewModel.cs" />
+    <Compile Include="Forms\Options\TeamViewerOptionsViewModel.cs" />
     <Compile Include="Forms\Popups\PopupAbout.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -92,6 +104,7 @@
       <DependentUpon>PopupAbout.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Popups\PopupInput.cs" />
+    <Compile Include="Forms\Options\QuasarOptionsViewModel.cs" />
     <Compile Include="Forms\StringResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -101,6 +114,7 @@
     <Compile Include="Utils\ConnectionHelper.cs" />
     <Compile Include="Utils\CryptHelper.cs" />
     <Compile Include="Utils\Data\ConnectionType.cs" />
+    <Compile Include="Utils\Data\ConnectionTypeExtensions.cs" />
     <Compile Include="Utils\Data\GroupElement.cs" />
     <Compile Include="Utils\Data\ServerElement.cs" />
     <Compile Include="Forms\Popups\PopupRecrypt.cs">
@@ -135,8 +149,12 @@
     </Compile>
     <Compile Include="app.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\FileSelector.cs" />
     <Compile Include="Utils\OtherHelper.cs" />
     <Compile Include="Utils\XmlHelper.cs" />
+    <EmbeddedResource Include="Forms\Options\CommonOptionsView.resx">
+      <DependentUpon>CommonOptionsView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Popups\PopupAbout.resx">
       <DependentUpon>PopupAbout.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -247,6 +265,7 @@
       <FileType>File</FileType>
     </PublishFile>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

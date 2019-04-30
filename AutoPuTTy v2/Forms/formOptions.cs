@@ -3,6 +3,8 @@ using System.Collections;
 using System.IO;
 using System.Windows.Forms;
 using System.Xml;
+using System.Linq; 
+using AutoPuTTY.Forms.Options;
 using AutoPuTTY.Forms.Popups;
 using AutoPuTTY.Properties;
 using AutoPuTTY.Utils;
@@ -23,6 +25,8 @@ namespace AutoPuTTY.Forms
         public readonly object locker = new object();
         public string ImportReplace = "";
 
+        private FileSelector fileSelector = new FileSelector();
+
         #endregion
 
         #region Element Loading
@@ -33,6 +37,8 @@ namespace AutoPuTTY.Forms
             InitializeComponent();
             ImportPopup = new popupImport(this);
             ReCryptPopup = new popupRecrypt(this);
+
+            Load += FormOptions_Load;
 
             Settings.Default.ocryptkey = Settings.Default.cryptkey;
 
@@ -83,6 +89,29 @@ namespace AutoPuTTY.Forms
             FirstRead = false;
         }
 
+        private void FormOptions_Load(object sender, EventArgs e)
+        {
+            if (tabs.TabPages.Cast<TabPage>().Any(p => p.Text == ConnectionType.RAdmin.ConvertToString()))
+            {
+                return; 
+            }
+
+            AddOptionTab(ConnectionType.RAdmin, new RAdminOptionsViewModel(MainForm.XmlHelper));
+            AddOptionTab(ConnectionType.AmmyAdmin, new AmmyAdminOptionsViewModel(MainForm.XmlHelper));
+            AddOptionTab(ConnectionType.TeamViewer, new TeamViewerOptionsViewModel(MainForm.XmlHelper));
+            AddOptionTab(ConnectionType.QuasarMsc, new QuasarOptionsViewModel(MainForm.XmlHelper));
+            AddOptionTab(ConnectionType.FileZillaFtp, new FileZillaOptionsViewModel(MainForm.XmlHelper));
+            AddOptionTab(ConnectionType.FarNetbox, new FarNetboxOptionsViewModel(MainForm.XmlHelper));
+        }
+
+        private void AddOptionTab(ConnectionType connectionType, CommonOptionsViewModel model)
+        {
+            var tabPage = new TabPage(connectionType.ConvertToString());
+            tabPage.BackColor = System.Drawing.Color.White;
+            tabPage.Controls.Add(new CommonOptionsView(model));
+            tabs.TabPages.Add(tabPage);
+        }
+
         #endregion
 
         #region Button Events
@@ -104,15 +133,10 @@ namespace AutoPuTTY.Forms
         /// <param name="e"></param>
         private void bPuTTYPath_Click(object sender, EventArgs e)
         {
-            OpenFileDialog browseFile = new OpenFileDialog
-            {
-                Title = Resources.formOptions_bPuTTYPath_Click_Select_PuTTY_executable,
-                Filter = Resources.formOptions_bPuTTYPath_Click_EXE_File____exe____exe
-            };
-
-            if (browseFile.ShowDialog() == DialogResult.OK)
-                if (browseFile.FileName.Contains(" ")) browseFile.FileName = "\"" + browseFile.FileName + "\"";
-                    tbPuTTYPath.Text = browseFile.FileName;
+            SelectFileForTextBox(
+                Resources.formOptions_bPuTTYPath_Click_Select_PuTTY_executable,
+                Resources.formOptions_exeFilter,
+                tbPuTTYPath);
         }
 
         /// <summary>
@@ -132,15 +156,10 @@ namespace AutoPuTTY.Forms
         /// <param name="e"></param>
         private void bRDPath_Click(object sender, EventArgs e)
         {
-            OpenFileDialog browseFile = new OpenFileDialog
-            {
-                Title = Resources.formOptions_bRDPath_Click_Select_Remote_Desktop_executable,
-                Filter = Resources.formOptions_bPuTTYPath_Click_EXE_File____exe____exe
-            };
-
-            if (browseFile.ShowDialog() == DialogResult.OK)
-                if (browseFile.FileName.Contains(" ")) browseFile.FileName = "\"" + browseFile.FileName + "\"";
-                    tbRDPath.Text = browseFile.FileName;
+            SelectFileForTextBox(
+                Resources.formOptions_bRDPath_Click_Select_Remote_Desktop_executable,
+                Resources.formOptions_exeFilter, 
+                tbRDPath);
         }
 
         /// <summary>
@@ -160,16 +179,19 @@ namespace AutoPuTTY.Forms
         /// <param name="e"></param>
         private void bVNCPath_Click(object sender, EventArgs e)
         {
-            OpenFileDialog browseFile = new OpenFileDialog
-            {
-                Title = Resources.formOptions_bVNCPath_Click_Select_VNC_Viewer_executable,
-                Filter = Resources.formOptions_bPuTTYPath_Click_EXE_File____exe____exe
-            };
+            SelectFileForTextBox(
+                Resources.formOptions_bVNCPath_Click_Select_VNC_Viewer_executable,
+                Resources.formOptions_exeFilter,
+                tbVNCPath);
+        }
 
-            if (browseFile.ShowDialog() == DialogResult.OK)
+        private void SelectFileForTextBox(string title, string filter, TextBox targetTextBox)
+        {
+            var path = fileSelector.SelectFile(title, filter);
+
+            if (!string.IsNullOrEmpty(path))
             {
-                if (browseFile.FileName.Contains(" ")) browseFile.FileName = "\"" + browseFile.FileName + "\"";
-                tbVNCPath.Text = browseFile.FileName;
+                targetTextBox.Text = path;
             }
         }
 
@@ -216,17 +238,10 @@ namespace AutoPuTTY.Forms
         /// <param name="e"></param>
         private void bWSCPPath_Click(object sender, EventArgs e)
         {
-            OpenFileDialog browseFile = new OpenFileDialog
-            {
-                Title = Resources.formOptions_bWSCPPath_Click_Select_WinSCP_executable,
-                Filter = Resources.formOptions_bPuTTYPath_Click_EXE_File____exe____exe
-            };
-
-            if (browseFile.ShowDialog() == DialogResult.OK)
-            {
-                if (browseFile.FileName.Contains(" ")) browseFile.FileName = "\"" + browseFile.FileName + "\"";
-                tbWSCPPath.Text = browseFile.FileName;
-            }
+            SelectFileForTextBox(
+                Resources.formOptions_bWSCPPath_Click_Select_WinSCP_executable,
+                Resources.formOptions_exeFilter,
+                tbWSCPPath);
         }
 
         /// <summary>
@@ -861,7 +876,7 @@ namespace AutoPuTTY.Forms
             OpenFileDialog browseFile = new OpenFileDialog
             {
                 Title = StringResources.formOptions_bNCPath_Click_Select_NetCat_executable,
-                Filter = Resources.formOptions_bPuTTYPath_Click_EXE_File____exe____exe
+                Filter = Resources.formOptions_exeFilter
             };
 
             if (browseFile.ShowDialog() == DialogResult.OK)
@@ -913,18 +928,7 @@ namespace AutoPuTTY.Forms
 
         private void bPlinkPath_Click(object sender, EventArgs e)
         {
-            OpenFileDialog browseFile = new OpenFileDialog
-            {
-                Title = "Select Plink executable",
-                Filter = Resources.formOptions_bPuTTYPath_Click_EXE_File____exe____exe
-            };
-
-            if (browseFile.ShowDialog() == DialogResult.OK)
-            {
-                if (browseFile.FileName.Contains(" ")) browseFile.FileName = "\"" + browseFile.FileName + "\"";
-                string sourceFilePath = browseFile.FileName;
-                tbPlinkPath.Text = sourceFilePath;
-            }
+            SelectFileForTextBox("Select Plink executable", Resources.formOptions_exeFilter, tbPlinkPath); 
         }
 
         private void tbPlinkPath_TextChanged(object sender, EventArgs e)

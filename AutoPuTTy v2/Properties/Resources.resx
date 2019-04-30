@@ -112,12 +112,12 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="iconmodify" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\iconmodify.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -181,7 +181,7 @@ GroupName  Name     Hostname[:port]     [[Domain\]username]     [Password]     [
   <data name="formOptions_bPuTTYPath_Click_Select_PuTTY_executable" xml:space="preserve">
     <value>Select PuTTY executable</value>
   </data>
-  <data name="formOptions_bPuTTYPath_Click_EXE_File____exe____exe" xml:space="preserve">
+  <data name="formOptions_exeFilter" xml:space="preserve">
     <value>EXE File (*.exe)|*.exe</value>
   </data>
   <data name="formOptions_bRDPath_Click_Select_Remote_Desktop_executable" xml:space="preserve">
@@ -240,5 +240,23 @@ GroupName  Name     Hostname[:port]     [[Domain\]username]     [Password]     [
   </data>
   <data name="red_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\red-icon.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="formOptions_select_radmin_executable" xml:space="preserve">
+    <value>Select Remote Desktop executable</value>
+  </data>
+  <data name="formOptions_select_ammyadmin_executable" xml:space="preserve">
+    <value>Select AmmyAdmin executable</value>
+  </data>
+  <data name="formOptions_select_farnetbox_executable" xml:space="preserve">
+    <value>Select FarNetbox executable</value>
+  </data>
+  <data name="formOptions_select_filezilla_executable" xml:space="preserve">
+    <value>Select FileZilla executable</value>
+  </data>
+  <data name="formOptions_select_quasar_executable" xml:space="preserve">
+    <value>Select Quasar executable</value>
+  </data>
+  <data name="formOptions_select_teamviewer_executable" xml:space="preserve">
+    <value>Select TeamViewer executable</value>
   </data>
 </root>
