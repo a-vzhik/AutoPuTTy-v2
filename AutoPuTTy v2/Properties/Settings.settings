@@ -105,13 +105,13 @@
       <Value Profile="(Default)">plink.exe</Value>
     </Setting>
     <Setting Name="radminpath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">radmin.exe</Value>
+      <Value Profile="(Default)">msc-radmin.exe</Value>
     </Setting>
     <Setting Name="teamviewerpath" Type="System.String" Scope="User">
       <Value Profile="(Default)">teamviewer.exe</Value>
     </Setting>
     <Setting Name="ammyadminpath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">ammyadmin.exe</Value>
+      <Value Profile="(Default)">AA_v3.exe</Value>
     </Setting>
     <Setting Name="quasarpath" Type="System.String" Scope="User">
       <Value Profile="(Default)">quasarmsc.exe</Value>
@@ -120,7 +120,7 @@
       <Value Profile="(Default)">filezilla.exe</Value>
     </Setting>
     <Setting Name="farnetboxpath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">farnetbox.exe</Value>
+      <Value Profile="(Default)">far.exe</Value>
     </Setting>
   </Settings>
 </SettingsFile>

@@ -7,6 +7,7 @@ using System.Threading;
 using System.Web;
 using System.Windows.Forms;
 using AutoPuTTY.Forms;
+using AutoPuTTY.Forms.Options;
 using AutoPuTTY.Forms.Popups;
 using AutoPuTTY.Properties;
 using AutoPuTTY.Utils.Data;
@@ -38,7 +39,7 @@ namespace AutoPuTTY.Utils
         /// В зависимости от переданного типа запускает нужный софт
         /// </summary>
         /// <param name="selectedNode">Current selected node from Tree View</param>
-        public static void StartConnect(TreeNode selectedNode)
+        public static void StartConnect(TreeNode selectedNode, XmlHelper xmlHelper)
         {
             Environment.CurrentDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? throw new InvalidOperationException();
 
@@ -95,10 +96,78 @@ namespace AutoPuTTY.Utils
                 case ConnectionType.Plink:
                     LaunchPlink(serverElement, plinkCommand);
                     break;
+                case ConnectionType.AmmyAdmin:
+                    LaunchAmmyAdmin(serverElement, xmlHelper);
+                    break;
+                case ConnectionType.RAdmin:
+                    LaunchRAdmin(serverElement, xmlHelper);
+                    break;
+                case ConnectionType.TeamViewer:
+                    LaunchTeamViewer(serverElement, xmlHelper);
+                    break;
                 default:
                     LaunchPuTTy(serverElement);
                     break;
             }
+        }
+
+        private static void LaunchTeamViewer(ServerElement serverElement, XmlHelper xmlHelper)
+        {
+            var model = new TeamViewerOptionsViewModel(xmlHelper);
+            if (!File.Exists(model.AppPath))
+            {
+                if (MessageBox.Show("Could not find file \"" + model.AppPath + "\"\nDo you want to change the configuration ?",
+                        Resources.connectionHelper_LaunchVnc_Error, MessageBoxButtons.OKCancel, MessageBoxIcon.Error) == DialogResult.OK)
+                {
+                    if (!model.ChangeAppPath())
+                    {
+                        return;
+                    }
+                }
+            }
+
+            string strCmdText = string.Format("/C \"{0}\" -i {1} =P {2}  &pause", 
+                model.AppPath, serverElement.Host, serverElement.Password);
+            Process.Start("CMD.exe", strCmdText);
+        }
+
+        private static void LaunchRAdmin(ServerElement serverElement, XmlHelper xmlHelper)
+        {
+            var model = new RAdminOptionsViewModel(xmlHelper);
+            if (!File.Exists(model.AppPath))
+            {
+                if (MessageBox.Show("Could not find file \"" + model.AppPath + "\"\nDo you want to change the configuration ?",
+                        Resources.connectionHelper_LaunchVnc_Error, MessageBoxButtons.OKCancel, MessageBoxIcon.Error) == DialogResult.OK)
+                {
+                    if (!model.ChangeAppPath())
+                    {
+                        return;
+                    }
+                }
+            }
+
+            string strCmdText = string.Format("/C \"{0}\" /connect:{1}:{2} /user:{3} /pwd:{4} /fullscreen &pause",
+                model.AppPath, serverElement.Host, serverElement.Port, serverElement.Username, serverElement.Password);
+            Process.Start("CMD.exe", strCmdText);
+        }
+
+        private static void LaunchAmmyAdmin(ServerElement serverElement, XmlHelper xmlHelper)
+        {
+            var model = new AmmyAdminOptionsViewModel(xmlHelper);
+            if (!File.Exists(model.AppPath))
+            {
+                if (MessageBox.Show("Could not find file \"" + model.AppPath + "\"\nDo you want to change the configuration ?",
+                        Resources.connectionHelper_LaunchVnc_Error, MessageBoxButtons.OKCancel, MessageBoxIcon.Error) == DialogResult.OK)
+                {
+                    if (!model.ChangeAppPath())
+                    {
+                        return;
+                    }
+                }
+            }
+
+            string strCmdText = string.Format("/C \"{0}\" -connect {1} -password {2} &pause", model.AppPath, serverElement.Host, serverElement.Port);
+            Process.Start("CMD.exe", strCmdText);
         }
 
         public static void LaunchTracert(String serverIP)

@@ -427,7 +427,7 @@ namespace AutoPuTTY.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("radmin.exe")]
+        [global::System.Configuration.DefaultSettingValueAttribute("msc-radmin.exe")]
         public string radminpath {
             get {
                 return ((string)(this["radminpath"]));
@@ -451,7 +451,7 @@ namespace AutoPuTTY.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("ammyadmin.exe")]
+        [global::System.Configuration.DefaultSettingValueAttribute("AA_v3.exe")]
         public string ammyadminpath {
             get {
                 return ((string)(this["ammyadminpath"]));
@@ -487,7 +487,7 @@ namespace AutoPuTTY.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("farnetbox.exe")]
+        [global::System.Configuration.DefaultSettingValueAttribute("far.exe")]
         public string farnetboxpath {
             get {
                 return ((string)(this["farnetboxpath"]));

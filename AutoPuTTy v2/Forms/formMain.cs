@@ -952,7 +952,7 @@ namespace AutoPuTTY.Forms
         /// </summary>
         public void connect()
         {
-            ConnectionHelper.StartConnect(tView.SelectedNode);
+            ConnectionHelper.StartConnect(tView.SelectedNode, xmlHelper);
         }
 
         #endregion
