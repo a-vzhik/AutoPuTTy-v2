@@ -29,6 +29,7 @@ namespace AutoPuTTY.Forms
         public const int WmSysCommand = 0x112;
 
         public static formOptions optionsForm;
+        public static connectionSettings connectionSettings;
         public static formMain CurrentFormMain;
 
         public List<string> types = new List<string>();
@@ -146,7 +147,7 @@ namespace AutoPuTTY.Forms
             if (XmlHelper.configGet("plinkpath") != "") Settings.Default.plinkpath = XmlHelper.configGet("plinkpath");
 
             optionsForm = new formOptions(this);
-
+            connectionSettings = new connectionSettings(this);
             IntPtr sysMenuHandle = GetSystemMenu(Handle, false);
             //It would be better to find the position at run time of the 'Close' item, but...
 
@@ -635,6 +636,7 @@ namespace AutoPuTTY.Forms
 
                     resetPbIcons(Resources.gray_icon);
 
+                    bConnectionSettings.Enabled = false;
                     return;
                 }
 
@@ -674,6 +676,9 @@ namespace AutoPuTTY.Forms
 
                 if (currentServer.AutoChecks)
                     new BackgroundHelper(tbServerHost.Text, textBox1.Text);
+
+                bConnectionSettings.Enabled = currentServer.Type == ConnectionType.Rdp;
+                connectionSettings.ConnectionChanged(currentServer);
             }
             else
             {
@@ -955,8 +960,12 @@ namespace AutoPuTTY.Forms
             ConnectionHelper.StartConnect(tView.SelectedNode, xmlHelper);
         }
 
+
         #endregion
 
-        
+        private void bConnectionSettings_Click(object sender, EventArgs e)
+        {
+            connectionSettings.ShowDialog(this);
+        }
     }
 }

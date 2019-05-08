@@ -2,8 +2,9 @@
 
 namespace AutoPuTTY.Utils.Data
 {
-    class ServerElement
+    public class ServerElement
     {
+        public Guid Id;
         public string Name;
 
         public string Host;

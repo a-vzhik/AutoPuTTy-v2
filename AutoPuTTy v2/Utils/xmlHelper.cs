@@ -198,7 +198,7 @@ namespace AutoPuTTY.Utils
                                     string serverPassword = "";
                                     string serverType = "";
                                     bool serverChecks = false;
-
+                                    Guid id = Guid.Empty;
                                     foreach (XmlElement serverElement in childNode.ChildNodes)
                                     {
                                         switch (serverElement.Name)
@@ -221,11 +221,15 @@ namespace AutoPuTTY.Utils
                                             case "Checks":
                                                 serverChecks = Boolean.Parse(serverElement.InnerText);
                                                 break;
+                                            case "Id":
+                                                Guid.TryParse(serverElement.InnerText, out id);
+                                                break;
 
                                         }
                                     }
-
-                                    servers.Add(new ServerElement(serverName, serverHost, serverPort, serverUsername, serverPassword, serverType, serverChecks));
+                                    var server = new ServerElement(serverName, serverHost, serverPort, serverUsername, serverPassword, serverType, serverChecks);
+                                    server.Id = id;
+                                    servers.Add(server);
                                     break;
                             }
                         }
@@ -491,6 +495,10 @@ namespace AutoPuTTY.Utils
             checks.InnerText = autoChecks.ToString();
             newServer.AppendChild(checks);
 
+            XmlElement id = xmlDocument.CreateElement("Id");
+            id.InnerText = Guid.NewGuid().ToString();
+            newServer.AppendChild(id);
+
             xmlGroup?.AppendChild(newServer);
 
             try
@@ -532,6 +540,7 @@ namespace AutoPuTTY.Utils
                             string serverPassword = "";
                             string serverType = "";
                             bool serverChecks = false;
+                            Guid id = Guid.Empty;
 
                             foreach (XmlElement serverElements in xmlElement.ChildNodes)
                             {
@@ -559,11 +568,15 @@ namespace AutoPuTTY.Utils
                                     case "Checks":
                                         serverChecks = Boolean.Parse(serverElements.InnerText);
                                         break;
+                                    case "Id":
+                                        Guid.TryParse(serverElements.InnerText, out id);
+                                        break;
                                 }
                             }
 
                             ServerElement currentServer = new ServerElement(foundedServerName, serverHost, serverPort,
                                 serverUsername, serverPassword, serverType, serverChecks);
+                            currentServer.Id = id;
 
                             return currentServer;
                     }

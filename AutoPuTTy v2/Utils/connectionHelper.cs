@@ -76,7 +76,7 @@ namespace AutoPuTTY.Utils
             switch (serverElement.Type)
             {
                 case ConnectionType.Rdp: //RDP
-                    LaunchRdp(serverElement);
+                    LaunchRdp(serverElement, xmlHelper);
                     break;
                 case ConnectionType.Vnc: //VNC
                     LaunchVnc(serverElement);
@@ -224,7 +224,7 @@ namespace AutoPuTTY.Utils
         /// Method for launch default RDP client (mstcs.exe)
         /// </summary>
         /// <param name="serverElement">Server data for launching</param>
-        private static void LaunchRdp(ServerElement serverElement)
+        private static void LaunchRdp(ServerElement serverElement, XmlHelper xmlHelper)
         {
             string[] rdpExtractFilePath = ExtractFilePath(Settings.Default.rdpath);
             string rdpPath = Environment.ExpandEnvironmentVariables(rdpExtractFilePath[0]);
@@ -232,7 +232,14 @@ namespace AutoPuTTY.Utils
 
             if (File.Exists(rdpPath))
             {
-                string[] sizes = Settings.Default.rdsize.Split('x');
+                var size = xmlHelper.configGet(serverElement.Id + "_rdsize");
+
+                if (string.IsNullOrEmpty(size))
+                {
+                    size = Settings.Default.rdsize;
+                }
+
+                string[] sizes = size.Split('x');
 
                 _rdpOutPath = "";
 
@@ -245,20 +252,28 @@ namespace AutoPuTTY.Utils
                         Directory.CreateDirectory(_rdpOutPath);
                 }
 
-                
+                var rddrives = Settings.Default.rddrives;
+                bool.TryParse(xmlHelper.configGet(serverElement.Id + "_rddrives"), out rddrives);
+
+                var rdadmin = Settings.Default.rdadmin;
+                bool.TryParse(xmlHelper.configGet(serverElement.Id + "_rdadmin"), out rdadmin);
+
+                var rdspan = Settings.Default.rdspan;
+                bool.TryParse(xmlHelper.configGet(serverElement.Id + "_rdspan"), out rdspan);
+
                 TextWriter rdpFileWriter = new StreamWriter(path: _rdpOutPath + OtherHelper.ReplaceU(f, serverElement.Name) + ".rdp");
 
                 //TODO: https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/tokens/interpolated
 
-                rdpFileWriter.WriteLine(Settings.Default.rdsize == "Full screen" ? "screen mode id:i:2" : "screen mode id:i:1");
+                rdpFileWriter.WriteLine(size == "Full screen" ? "screen mode id:i:2" : "screen mode id:i:1");
                 rdpFileWriter.WriteLine(sizes.Length == 2 ? "desktopwidth:i:" + sizes[0] : "");
                 rdpFileWriter.WriteLine(sizes.Length == 2 ? "desktopheight:i:" + sizes[1] : "");
                 rdpFileWriter.WriteLine(serverElement.HostWithPort != "" ? "full address:s:" + serverElement.HostWithPort : "");
                 rdpFileWriter.WriteLine(serverElement.Username != "" ? "username:s:" + serverElement.Username : "");
                 rdpFileWriter.WriteLine(serverElement.Username != "" && serverElement.Password != "" ? "password 51:b:" + CryptHelper.encryptpw(serverElement.Password) : "");
-                rdpFileWriter.WriteLine(Settings.Default.rddrives ? "redirectdrives:i:1" : "");
-                rdpFileWriter.WriteLine(Settings.Default.rdadmin ? "administrative session:i:1" : "");
-                rdpFileWriter.WriteLine(Settings.Default.rdspan ? "use multimon:i:1" : "");
+                rdpFileWriter.WriteLine(rddrives ? "redirectdrives:i:1" : "");
+                rdpFileWriter.WriteLine(rdadmin ? "administrative session:i:1" : "");
+                rdpFileWriter.WriteLine(rdspan ? "use multimon:i:1" : "");
 
                 rdpFileWriter.Close();
 
