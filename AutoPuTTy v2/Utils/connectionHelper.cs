@@ -126,7 +126,7 @@ namespace AutoPuTTY.Utils
                 }
             }
 
-            string strCmdText = string.Format("/C \"{0}\" -i {1} =P {2}  &pause", 
+            string strCmdText = string.Format("/C \"{0}\" -i {1} -P {2} ", 
                 model.AppPath, serverElement.Host, serverElement.Password);
             Process.Start("CMD.exe", strCmdText);
         }
@@ -146,7 +146,7 @@ namespace AutoPuTTY.Utils
                 }
             }
 
-            string strCmdText = string.Format("/C \"{0}\" /connect:{1}:{2} /user:{3} /pwd:{4} /fullscreen &pause",
+            string strCmdText = string.Format("/C \"{0}\" /connect:{1}:{2} /user:{3} /pwd:{4} /fullscreen",
                 model.AppPath, serverElement.Host, serverElement.Port, serverElement.Username, serverElement.Password);
             Process.Start("CMD.exe", strCmdText);
         }
@@ -166,7 +166,7 @@ namespace AutoPuTTY.Utils
                 }
             }
 
-            string strCmdText = string.Format("/C \"{0}\" -connect {1} -password {2} &pause", model.AppPath, serverElement.Host, serverElement.Port);
+            string strCmdText = string.Format("/C \"{0}\" -connect {1} -password {2}", model.AppPath, serverElement.Host, serverElement.Password);
             Process.Start("CMD.exe", strCmdText);
         }
 
