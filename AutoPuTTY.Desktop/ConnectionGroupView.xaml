@@ -1,0 +1,63 @@
+﻿<UserControl x:Class="AutoPuTTY.Desktop.ConnectionGroupView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:AutoPuTTY.Desktop">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Parameters/UI/PasswordConnectionParameterResources.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Parameters/UI/StringConnectionParameterResources.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Parameters/UI/SwitchConnectionParameterResources.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Parameters/UI/PredefinedConnectionParameterResources.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Parameters/UI/FilePathConnectionParameterResources.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Parameters/UI/FolderPathConnectionParameterResources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid VerticalAlignment="Top">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="10"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Название группы:"
+                   TextBlock.FontWeight="Bold"
+                   HorizontalAlignment="Right"
+                   VerticalAlignment="Center"/>
+        <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                 Grid.Column="2"
+                 VerticalAlignment="Center"
+                 Margin="0 0 3 0"/>
+
+        <ItemsControl ItemsSource="{Binding ParameterViewModels}"
+                      Grid.Row="2"
+                      Grid.ColumnSpan="3">
+            <ItemsControl.ItemContainerStyle>
+                <Style TargetType="FrameworkElement">
+                    <Style.Setters>
+                        <Setter Property="Margin"
+                                Value="2"/>
+                        <Setter Property="Visibility"
+                                Value="Visible"></Setter>
+                    </Style.Setters>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsHidden}"
+                                     Value="True">
+                            <Setter Property="Visibility"
+                                    Value="Collapsed"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+        </ItemsControl>
+
+    </Grid>
+</UserControl>

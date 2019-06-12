@@ -1,0 +1,174 @@
+﻿<Window x:Class="AutoPuTTY.Desktop.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:AutoPuTTY.Desktop"
+        Icon="pack://application:,,,/Images/autoputty.ico"
+        Width="800"
+        FontSize="12"
+        Name="Root">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/CommonResources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="350"/>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10"></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="10"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <TreeView ItemsSource="{Binding ConnectionGroupViewModels}"
+                  SelectedValuePath="SelectedObject"
+                  local:TreeViewHelper.SelectedItem="{Binding SelectedObject, Mode=TwoWay}"
+                  Grid.Row="1">
+            <TreeView.Resources>
+                <HierarchicalDataTemplate DataType="{x:Type local:ConnectionGroupViewModel}"
+                                          ItemsSource="{Binding ConnectionViewModels}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="{Binding IconUri}" Width="24" Height="24" Margin="0 1 4 1" />
+                        <TextBlock Text="{Binding Name}"
+                                   VerticalAlignment="Center"/>
+                        <Button Command="{Binding Path=DataContext.DeleteObjectCommand, ElementName=Root}"
+                                CommandParameter="{Binding}"
+                                KeyboardNavigation.DirectionalNavigation="None"
+                                KeyboardNavigation.IsTabStop="False"
+                                Content="pack://application:,,,/Images/icondelete.png"
+                                ToolTip="Удалить группу"
+                                Style="{StaticResource IconButtonStyle}"
+                                Margin="5 0 0 0">
+
+                        </Button>
+                    </StackPanel>
+                </HierarchicalDataTemplate>
+                <DataTemplate DataType="{x:Type local:ConnectionDescriptionViewModel}">
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel.InputBindings>
+                            <MouseBinding Gesture="LeftDoubleClick" 
+                                          Command="{Binding Path=DataContext.RunConnectionCommand, ElementName=Root}" 
+                                          CommandParameter="{Binding}" />
+
+                        </StackPanel.InputBindings>
+                        <Image Source="{Binding IconUri}" Width="24" Height="24" Margin="0 1 4 1" />
+                        <TextBlock Text="{Binding Name}"
+                                   VerticalAlignment="Center"/>
+                        <Button Command="{Binding Path=DataContext.RunConnectionCommand, ElementName=Root}"
+                                KeyboardNavigation.DirectionalNavigation="None"
+                                KeyboardNavigation.IsTabStop="False"
+                                CommandParameter="{Binding}"
+                                Content="pack://application:,,,/Images/run.png"
+                                ToolTip="Запустить подключение"
+                                Margin="5 0 0 0"
+                                Style="{StaticResource IconButtonStyle}"/>
+                        <Button Command="{Binding Path=DataContext.DeleteObjectCommand, ElementName=Root}"
+                                KeyboardNavigation.DirectionalNavigation="None"
+                                KeyboardNavigation.IsTabStop="False"
+                                CommandParameter="{Binding}"
+                                Content="pack://application:,,,/Images/icondelete.png"
+                                ToolTip="Удалить подключение"
+                                Margin="5 0 0 0"
+                                Style="{StaticResource IconButtonStyle}">
+                            
+                        </Button>
+                    </StackPanel>
+
+                </DataTemplate>
+            </TreeView.Resources>
+            <TreeView.ItemContainerStyle>
+                <Style TargetType="TreeViewItem">
+                    <Setter Property="IsExpanded"
+                            Value="{Binding IsExpanded}"/>
+                    <!--<Setter Property="(InputBindings)">
+                        <Setter.Value>
+                            <MouseBinding Gesture="LeftDoubleClick" 
+                                          Command="{Binding Path=DataContext.RunConnectionCommand, ElementName=Root}" 
+                                          CommandParameter="{Binding}" />
+                        </Setter.Value>
+                    </Setter>-->
+                </Style>
+            </TreeView.ItemContainerStyle>
+            <TreeView.InputBindings>
+                <KeyBinding Key="Return" 
+                            Command="{Binding Path=RunConnectionCommand}" 
+                            CommandParameter="{Binding SelectedObject}" />
+            </TreeView.InputBindings>
+        </TreeView>
+
+        <GridSplitter Grid.Column="1"
+                      Grid.Row="1"
+                      Grid.RowSpan="3"
+                      Width="10"
+                      HorizontalAlignment="Stretch"/>
+
+        <StackPanel Grid.Row="3"
+                    Orientation="Vertical"
+                    Margin="10">
+            <Button Content="Создать группу"
+                    Command="{Binding CreateGroupCommand}"
+                    Margin="0 0 0 10"></Button>
+            <!--<Button Content="Создать подключение"
+                    Command="{Binding CreateConnectionCommand}"></Button>-->
+            <ComboBox ItemsSource="{Binding ConnectionTypes}"
+                      Text="Создать подключение...">
+                <ComboBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Width="500"/>
+                    </ItemsPanelTemplate>
+                </ComboBox.ItemsPanel>
+                <ComboBox.ItemContainerStyle>
+                    <Style TargetType="ComboBoxItem">
+                        <Setter Property="Margin"
+                                Value="10"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ComboBoxItem">
+                                    <ContentPresenter />
+                                </ControlTemplate>
+                            </Setter.Value>
+
+                        </Setter>
+                    </Style>
+                </ComboBox.ItemContainerStyle>
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <Button Content="{Binding}"
+                                Width="130"
+                                Padding="10 5"
+                                Command="{Binding DataContext.CreateConnectionCommand, ElementName=Root}"
+                                CommandParameter="{Binding}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+
+            </ComboBox>
+        </StackPanel>
+
+        <ContentPresenter Content="{Binding SelectedObject}"
+                          Grid.Column="2"
+                          Grid.RowSpan="3"
+                          Grid.Row="1">
+            <ContentPresenter.Resources>
+                <DataTemplate DataType="{x:Type local:ConnectionDescriptionViewModel}">
+                    <local:ConnectionEditorView DataContext="{Binding}"/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type local:ConnectionGroupViewModel}">
+                    <local:ConnectionGroupView DataContext="{Binding}"/>
+                </DataTemplate>                
+            </ContentPresenter.Resources>
+        </ContentPresenter>
+        
+        <!--<TextBlock Text="{Binding RAdminConnectionViewModel.Source.Name, ElementName=Root}"
+                   Grid.Column="2"/>
+        <local:ConnectionEditorView DataContext="{Binding RAdminConnectionViewModel, ElementName=Root}"
+                                    Grid.Row="2"
+                                    Grid.Column="2"/>-->
+    </Grid>
+</Window>

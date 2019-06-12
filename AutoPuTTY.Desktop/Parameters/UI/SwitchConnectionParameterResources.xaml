@@ -1,0 +1,19 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:AutoPuTTY.Desktop.Parameters.UI"
+                    xmlns:params="clr-namespace:AutoPuTTY.Desktop.Parameters">
+    <DataTemplate DataType="{x:Type params:SwitchConnectionParameterViewModel}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="{Binding Source.DisplayName}"
+                       HorizontalAlignment="Right"/>
+            <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay}"
+                  Grid.Column="2"/>
+        </Grid>
+    </DataTemplate>    
+</ResourceDictionary>

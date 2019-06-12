@@ -1,0 +1,221 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{57FFC152-C5A2-46E5-890D-BCCC4715055A}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>AutoPuTTY.Desktop</RootNamespace>
+    <AssemblyName>AutoPuTTY.Desktop</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="JsonSubTypes, Version=1.5.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\JsonSubTypes.1.5.2\lib\net40\JsonSubTypes.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="ConnectionGroupView.xaml.cs">
+      <DependentUpon>ConnectionGroupView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ConnectionType.cs" />
+    <Compile Include="ConnectionTypeExtensions.cs" />
+    <Compile Include="GroupElement.cs" />
+    <Compile Include="KnownConnections.cs" />
+    <Compile Include="Parameters\FolderPathConnectionParameterViewModel.cs" />
+    <Compile Include="Parameters\FilePathConnectionParameterViewModel.cs" />
+    <Compile Include="Parameters\PasswordConnectionParameterViewModel.cs" />
+    <Compile Include="Parameters\UI\PasswordBoxBehavior.cs" />
+    <Compile Include="SelectFileView.cs" />
+    <Compile Include="ServerElement.cs" />
+    <Compile Include="Repository\NewRepositoryReader.cs" />
+    <Compile Include="Repository\OldRepositoryReader.cs" />
+    <Compile Include="TreeViewBehavior.cs" />
+    <Compile Include="xmlHelper.cs" />
+    <Page Include="CommonResources.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ConnectionDescriptionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ConnectionGroupView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ConnectionDescriptionViewModel.cs" />
+    <Compile Include="ConnectionDescriptionView.xaml.cs">
+      <DependentUpon>ConnectionDescriptionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ConnectionGroupViewModel.cs" />
+    <Compile Include="Input\DelegateCommand.cs" />
+    <Compile Include="Input\DelegateCommandOfT.cs" />
+    <Compile Include="Input\ViewModelCommandBase.cs" />
+    <Compile Include="Input\ViewModelCommandHelper.cs" />
+    <Compile Include="Input\WeakDelegateReference.cs" />
+    <Compile Include="MainWindowViewModel.cs" />
+    <Compile Include="Parameters\ConnectionParameterViewModelFactory.cs" />
+    <Compile Include="Parameters\ConnectionParameterViewModelBase.cs" />
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="ParametersPresenterResources.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Parameters\UI\FolderPathConnectionParameterResources.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Parameters\UI\FilePathConnectionParameterResources.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Parameters\UI\PredefinedConnectionParameterResources.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Parameters\UI\PasswordConnectionParameterResources.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Parameters\UI\StringConnectionParameterResources.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Parameters\UI\SwitchConnectionParameterResources.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Data\ObservableObject.cs" />
+    <Compile Include="Parameters\PredefinedConnectionParameterViewModel.cs" />
+    <Compile Include="Parameters\StringConnectionParameterViewModel.cs" />
+    <Compile Include="Parameters\SwitchConnectionParameterViewModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AutoPuTTY.Core\AutoPuTTY.Core.csproj">
+      <Project>{8b6d4639-659d-414f-a8f7-e4d241addf97}</Project>
+      <Name>AutoPuTTY.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\PuTTY_icon_128px.png" />
+    <Resource Include="Images\rdp.png" />
+    <Resource Include="Images\WinSCP_Logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\vnc.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\ammy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\about.png" />
+    <Resource Include="Images\autoputty.ico" />
+    <Resource Include="Images\blue-icon.png" />
+    <Resource Include="Images\close.png" />
+    <Resource Include="Images\closed.png" />
+    <Resource Include="Images\closeh.png" />
+    <Resource Include="Images\gray-icon.png" />
+    <Resource Include="Images\greed-icon.png" />
+    <Resource Include="Images\green-icon.bmp" />
+    <Resource Include="Images\iconadd.png" />
+    <Resource Include="Images\icondelete.png" />
+    <Resource Include="Images\iconeyehide.png" />
+    <Resource Include="Images\iconeyeshow.png" />
+    <Resource Include="Images\iconmodify.png" />
+    <Resource Include="Images\iconoptions.png" />
+    <Resource Include="Images\red-icon.png" />
+    <Resource Include="Images\warning.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\radmin.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\folder.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\run.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

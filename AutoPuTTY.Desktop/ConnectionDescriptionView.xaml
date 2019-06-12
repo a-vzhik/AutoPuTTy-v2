@@ -1,0 +1,95 @@
+﻿<UserControl x:Class="AutoPuTTY.Desktop.ConnectionEditorView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:AutoPuTTY.Desktop" 
+             xmlns:params="clr-namespace:AutoPuTTY.Desktop.Parameters">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Parameters/UI/PasswordConnectionParameterResources.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Parameters/UI/StringConnectionParameterResources.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Parameters/UI/SwitchConnectionParameterResources.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Parameters/UI/PredefinedConnectionParameterResources.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Parameters/UI/FilePathConnectionParameterResources.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Parameters/UI/FolderPathConnectionParameterResources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="100"/>
+        </Grid.RowDefinitions>
+        <TextBlock TextElement.FontWeight="Bold"
+                   Margin="10 0">
+            <Run Text="Редактрирование подключения " /> 
+            <Run Text="{Binding Source.ConnectionTypeName}" />
+        </TextBlock>
+        <Grid Margin="10 0 3 10"
+              Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Название"
+                       FontWeight="Bold"
+                       HorizontalAlignment="Right"/>
+            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                     Grid.Column="2"/>
+        </Grid>
+        <TextBlock Text="Параметры подключения" 
+                   TextElement.FontWeight="Bold"
+                   Margin="10 0 0 0"
+                   Grid.Row="2"/>
+        <ItemsControl ItemsSource="{Binding ParameterViewModels}"
+                      Grid.Row="3"
+                      Margin="10 0 0 0">
+            <ItemsControl.ItemContainerStyle>
+                <Style TargetType="FrameworkElement">
+                    <Style.Setters>
+                        <Setter Property="Margin"
+                                Value="2"/>
+                        <Setter Property="Visibility"
+                                Value="Visible"></Setter>
+                    </Style.Setters>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsHidden}"
+                                     Value="True">
+                            <Setter Property="Visibility"
+                                    Value="Collapsed"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+        </ItemsControl>
+        <UniformGrid Columns="4"
+                     Grid.Row="4"
+                     Margin="0 10">
+            <Button Content="Пинговать" 
+                    Margin="10 0"
+                    Command="{Binding PingCommand}"/>
+            <Button Content="NetCat"
+                    Command="{Binding NetCatCommand}"
+                    Margin="0 0 10 0"/>
+            <Button Content="Tracert" 
+                    Margin="0 0 10 0"
+                    Command="{Binding TracertCommand}"/>
+            <Button Content="Запустить" 
+                    Margin="0 0 10 0"
+                    Command="{Binding RunCommand}"/>
+        </UniformGrid>
+        <TextBox Text="{Binding CommandLineText, Mode=OneWay}"
+                 AcceptsReturn="True"
+                 Grid.Row="6"
+                 IsReadOnly="True"
+                 TextWrapping="Wrap">
+            
+        </TextBox>
+    </Grid>
+</UserControl>
