@@ -34,6 +34,7 @@ namespace AutoPuTTY.Desktop
         private readonly Timer _timer;
 
         SynchronizationContext _context = SynchronizationContext.Current;
+
         private DelegateCommand<ConnectionDescriptionViewModel> _runConnectionCommand;
         private DelegateCommand<ConnectionDescriptionViewModel> _copyConnectionCommand;
 
@@ -69,7 +70,7 @@ namespace AutoPuTTY.Desktop
             }
 
             _timer = new Timer();
-            _timer.Interval = 10000;
+            _timer.Interval = 30000;
             _timer.Elapsed += Timer_Elapsed;
             _timer.Enabled = true;
         }
@@ -78,12 +79,22 @@ namespace AutoPuTTY.Desktop
         {
             _context.Send(obj =>
             {
-                var groups = ConnectionGroupViewModels.Select(vm => vm.Source).ToList();
-
-                var repoReader = new NewRepositoryReader(_knownConnections);
-                repoReader.Save(ConnectionsFile, groups);
-                repoReader.SaveProfiles(ProfilesFile, _knownConnections._knownConnectionProfiles);
+                SaveProject();
             }, null);
+        }
+
+        public void Close()
+        {
+            SaveProject();
+        }
+
+        private void SaveProject()
+        {
+            var groups = ConnectionGroupViewModels.Select(vm => vm.Source).ToList();
+
+            var repoReader = new NewRepositoryReader(_knownConnections);
+            repoReader.Save(ConnectionsFile, groups);
+            repoReader.SaveProfiles(ProfilesFile, _knownConnections._knownConnectionProfiles);
         }
 
         public ICommand CreateGroupCommand

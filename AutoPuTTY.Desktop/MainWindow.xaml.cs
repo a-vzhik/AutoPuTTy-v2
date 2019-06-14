@@ -29,7 +29,18 @@ namespace AutoPuTTY.Desktop
             DataContext = new MainWindowViewModel();
 
             InitializeComponent();
+
+            Closing += MainWindow_Closing;
         }
 
+        private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            var mwvm = DataContext as MainWindowViewModel;
+
+            if (mwvm != null)
+            {
+                mwvm.Close();
+            }
+        }
     }
 }

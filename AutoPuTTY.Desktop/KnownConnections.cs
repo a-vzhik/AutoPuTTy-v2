@@ -87,7 +87,7 @@ namespace AutoPuTTY.Desktop
                     DisplayName = "Хост",
                     CmdLineName = "full address:s:",
                     Delimiter = "",
-                    Value = "localhost", 
+                    Value = "", 
                     NextParameterDelimiter = ":"
                 },
 
@@ -228,7 +228,7 @@ namespace AutoPuTTY.Desktop
                     DisplayName = "Хост",
                     CmdLineName = "host",
                     Delimiter = "=",
-                    Value = "localhost",
+                    Value = "",
                 },
 
                 new StringConnectionParameter()
@@ -302,7 +302,7 @@ namespace AutoPuTTY.Desktop
                     DisplayName = "Хост",
                     CmdLineName = "/connect",
                     Delimiter = ":",
-                    Value = "localhost", 
+                    Value = "", 
                     NextParameterDelimiter = ":"
                 },
 
@@ -362,7 +362,7 @@ namespace AutoPuTTY.Desktop
                     DisplayName = "Хост",
                     CmdLineName = "",
                     Delimiter = "",
-                    Value = "localhost", 
+                    Value = "", 
                     CmdLineOrder = 1,
                 },
 
@@ -441,7 +441,7 @@ namespace AutoPuTTY.Desktop
                     DisplayName = "Хост",
                     CmdLineName = "",
                     Delimiter = "",
-                    Value = "localhost",
+                    Value = "",
                 },
 
                 new StringConnectionParameter()
@@ -579,7 +579,7 @@ namespace AutoPuTTY.Desktop
                     DisplayName = "Хост",
                     CmdLineName = "",
                     Delimiter = "@",
-                    Value = "localhost",
+                    Value = "",
                     NextParameterDelimiter = "",
                     CmdLineOrder = 3,
                 },
@@ -666,7 +666,7 @@ namespace AutoPuTTY.Desktop
                     DisplayName = "Хост",
                     CmdLineName = "",
                     Delimiter = "@",
-                    Value = "localhost",
+                    Value = "",
                     NextParameterDelimiter = "",
                     CmdLineOrder = 3,
                 },
@@ -744,7 +744,7 @@ namespace AutoPuTTY.Desktop
                     DisplayName = "Хост",
                     CmdLineName = "",
                     Delimiter = "@",
-                    Value = "localhost",
+                    Value = "",
                     NextParameterDelimiter = "",
                     CmdLineOrder = 3,
                 },
