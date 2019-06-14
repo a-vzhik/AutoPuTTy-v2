@@ -21,7 +21,7 @@ namespace AutoPuTTY.Desktop
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    internal partial class MainWindow : Window
     {
         public MainWindow()
         {
@@ -30,17 +30,74 @@ namespace AutoPuTTY.Desktop
 
             InitializeComponent();
 
+            Model.SelectedObjectChanged += Model_SelectedObjectChanged;
             Closing += MainWindow_Closing;
+            TreeView.ItemContainerGenerator.ItemsChanged += ItemContainerGenerator_ItemsChanged;
+            TreeView.ItemContainerGenerator.StatusChanged += ItemContainerGenerator_StatusChanged;
+        }
+
+        private void ItemContainerGenerator_StatusChanged(object sender, EventArgs e)
+        {
+            SyncSelectedItem();
+        }
+
+        private void ItemContainerGenerator_ItemsChanged(object sender, System.Windows.Controls.Primitives.ItemsChangedEventArgs e)
+        {
+            SyncSelectedItem();
+        }
+
+        public static TreeViewItem FindTviFromObjectRecursive(ItemsControl ic, object o)
+        {
+            if (ic == null)
+                return null;
+
+            //Search for the object model in first level children (recursively)
+            TreeViewItem tvi = ic.ItemContainerGenerator.ContainerFromItem(o) as TreeViewItem;
+            if (tvi != null)
+                return tvi;
+            //Loop through user object models
+            foreach (object i in ic.Items)
+            {
+                //Get the TreeViewItem associated with the iterated object model
+                TreeViewItem tvi2 = ic.ItemContainerGenerator.ContainerFromItem(i) as TreeViewItem;
+                tvi = FindTviFromObjectRecursive(tvi2, o);
+                if (tvi != null) return tvi;
+            }
+            return null;
+        }
+
+        private void SyncSelectedItem()
+        {
+            if (TreeView.SelectedValue != Model.SelectedObject)
+            {
+                var tvi = FindTviFromObjectRecursive(TreeView, Model.SelectedObject);
+                if (tvi != null)
+                {
+                    tvi.IsSelected = true;
+                    tvi.BringIntoView();
+                }
+            }
+        }
+
+        private void Model_SelectedObjectChanged(object sender, EventArgs e)
+        {
+            Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Render,
+                new Action(() =>
+                {
+                    SyncSelectedItem();
+                }));
         }
 
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            var mwvm = DataContext as MainWindowViewModel;
-
-            if (mwvm != null)
-            {
-                mwvm.Close();
-            }
+            Model.Close();
         }
+
+        private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            Model.SelectedObject = e.NewValue;
+        }
+        
+        public MainWindowViewModel Model { get { return DataContext as MainWindowViewModel; } }
     }
 }

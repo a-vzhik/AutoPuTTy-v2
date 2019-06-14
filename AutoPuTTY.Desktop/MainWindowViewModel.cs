@@ -308,9 +308,13 @@ namespace AutoPuTTY.Desktop
             }
             set
             {
-                _selectedObject = value;
-                ViewModelCommandHelper.Invalidate(_createConnectionCommand);
-                RaisePropertyChanged(nameof(SelectedObject));
+                if (_selectedObject != value)
+                {
+                    _selectedObject = value;
+                    ViewModelCommandHelper.Invalidate(_createConnectionCommand);
+                    RaisePropertyChanged(nameof(SelectedObject));
+                    SelectedObjectChanged?.Invoke(this, EventArgs.Empty);
+                }
             }
         }
 
@@ -322,5 +326,6 @@ namespace AutoPuTTY.Desktop
             }
         }
 
+        public event EventHandler SelectedObjectChanged;
     }
 }
