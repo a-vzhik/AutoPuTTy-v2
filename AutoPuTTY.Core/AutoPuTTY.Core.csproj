@@ -55,6 +55,7 @@
     <Compile Include="ConnectionLauncherProvider.cs" />
     <Compile Include="ConnectionParameterIntance.cs" />
     <Compile Include="CryptHelper.cs" />
+    <Compile Include="Data\JsonEncryptingConverter.cs" />
     <Compile Include="Launchers\DefaultConnectionLauncher.cs" />
     <Compile Include="ConnectionGroupInstance.cs" />
     <Compile Include="Launchers\IConnectionLauncher.cs" />

@@ -59,6 +59,8 @@ namespace AutoPuTTY.Desktop
         }
 
 
+        
+
         public static ConnectionDescription Rdp()
         {
             var connection = new ConnectionDescription();

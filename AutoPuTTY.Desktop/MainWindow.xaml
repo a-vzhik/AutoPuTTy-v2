@@ -69,6 +69,14 @@
                                 ToolTip="Запустить подключение"
                                 Margin="5 0 0 0"
                                 Style="{StaticResource IconButtonStyle}"/>
+                        <Button Command="{Binding Path=DataContext.CopyConnectionCommand, ElementName=Root}"
+                                KeyboardNavigation.DirectionalNavigation="None"
+                                KeyboardNavigation.IsTabStop="False"
+                                CommandParameter="{Binding}"
+                                Content="pack://application:,,,/Images/copy.png"
+                                ToolTip="Скопировать подключение"
+                                Margin="5 0 0 0"
+                                Style="{StaticResource IconButtonStyle}"/>                        
                         <Button Command="{Binding Path=DataContext.DeleteObjectCommand, ElementName=Root}"
                                 KeyboardNavigation.DirectionalNavigation="None"
                                 KeyboardNavigation.IsTabStop="False"

@@ -12,7 +12,7 @@ using System.Windows.Input;
 
 namespace AutoPuTTY.Desktop
 {
-    public class ConnectionDescriptionViewModel : ObservableObject
+    internal class ConnectionDescriptionViewModel : ObservableObject
     {
         private string _name;
 
@@ -22,16 +22,20 @@ namespace AutoPuTTY.Desktop
 
         private DelegateCommand _pingCommand;
 
+        internal ConnectionGroupViewModel Parent { get; }
+
         private readonly KnownConnections _knownConnections;
 
         private readonly IFileSelector _fileSelector;
 
         public ConnectionDescriptionViewModel(
-            ConnectionDescription source, 
+            ConnectionDescription source,
+            ConnectionGroupViewModel parent,
             KnownConnections knownConnections,
             IFileSelector fileSelector,
             ConnectionParameterViewModelFactory connectionParameterViewModelFactory)
         {
+            Parent = parent;
             _knownConnections = knownConnections;
             _fileSelector = fileSelector;
             Source = source;

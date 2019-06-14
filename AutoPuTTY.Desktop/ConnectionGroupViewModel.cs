@@ -14,6 +14,8 @@ namespace AutoPuTTY.Desktop
         private string _name;
         private bool _isExpanded;
         private readonly ConnectionGroup _connectionGroup;
+        private readonly KnownConnections _knownConnections;
+        private readonly ConnectionParameterViewModelFactory _connectionParameterViewModelFactory;
 
         public ConnectionGroupViewModel(
             ConnectionGroup connectionGroup,
@@ -21,15 +23,17 @@ namespace AutoPuTTY.Desktop
             ConnectionParameterViewModelFactory connectionParameterViewModelFactory)
         {
             _connectionGroup = connectionGroup;
+            _knownConnections = knownConnections;
+            _connectionParameterViewModelFactory = new ConnectionParameterViewModelFactory();
 
             ConnectionViewModels = new ObservableCollection<ConnectionDescriptionViewModel>(
                 connectionGroup.Connections
-                .Select(c => new ConnectionDescriptionViewModel(c, knownConnections, new SelectFileView(), new ConnectionParameterViewModelFactory()))
-                .ToList());
-
+                   .Select(c => new ConnectionDescriptionViewModel(c, this, _knownConnections, new SelectFileView(), _connectionParameterViewModelFactory))
+                   .ToList());
+            
             GroupViewModels = new ObservableCollection<ConnectionGroupViewModel>(
                 connectionGroup.Groups
-                .Select(gr => new ConnectionGroupViewModel(gr, knownConnections, new ConnectionParameterViewModelFactory()))
+                .Select(gr => new ConnectionGroupViewModel(gr, knownConnections, _connectionParameterViewModelFactory))
                 .ToList());
 
             ParameterViewModels = connectionGroup.Parameters
@@ -37,6 +41,21 @@ namespace AutoPuTTY.Desktop
                 .ToList();
 
             Name = connectionGroup.Name;
+        }
+
+        public ConnectionDescriptionViewModel AddConnection(ConnectionDescription connection)
+        {
+            var vm = new ConnectionDescriptionViewModel(connection, this, _knownConnections, new SelectFileView(), _connectionParameterViewModelFactory);
+            ConnectionViewModels.Add(vm);
+            Source.Connections.Add(vm.Source);
+
+            return vm;
+        }
+
+        public void RemoveConnection(ConnectionDescriptionViewModel connectionViewModel)
+        {
+            ConnectionViewModels.Remove(connectionViewModel);
+            Source.Connections.Remove(connectionViewModel.Source);
         }
 
         public IList<object> ParameterViewModels { get; }

@@ -35,6 +35,7 @@ namespace AutoPuTTY.Desktop
 
         SynchronizationContext _context = SynchronizationContext.Current;
         private DelegateCommand<ConnectionDescriptionViewModel> _runConnectionCommand;
+        private DelegateCommand<ConnectionDescriptionViewModel> _copyConnectionCommand;
 
         public MainWindowViewModel()
         {
@@ -72,8 +73,6 @@ namespace AutoPuTTY.Desktop
             _timer.Elapsed += Timer_Elapsed;
             _timer.Enabled = true;
         }
-
-
 
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
@@ -137,13 +136,7 @@ namespace AutoPuTTY.Desktop
                             }
                         }
 
-                        var viewModel = new ConnectionDescriptionViewModel(connection,
-                            _knownConnections,
-                            new SelectFileView(),
-                            new ConnectionParameterViewModelFactory());
-
-                        selectedGroup.ConnectionViewModels.Add(viewModel);
-                        selectedGroup.Source.Connections.Add(connection);
+                        var viewModel = selectedGroup.AddConnection(connection);
                         SelectedObject = viewModel;
                     }, 
                     _ => SelectedObject is ConnectionGroupViewModel,
@@ -166,6 +159,43 @@ namespace AutoPuTTY.Desktop
 
                 return _runConnectionCommand;
             }
+        }
+
+        public ICommand CopyConnectionCommand
+        {
+            get
+            {
+                if (_copyConnectionCommand == null)
+                {
+                    _copyConnectionCommand = new DelegateCommand<ConnectionDescriptionViewModel>(vm =>
+                    {
+                        ConnectionDescription newConnection = CopyConnection(vm.Source);
+
+                        var newConnectionViewModel = vm.Parent.AddConnection(newConnection);
+                        SelectedObject = newConnectionViewModel;
+                    }, true);
+                }
+
+                return _copyConnectionCommand;
+            }
+        }
+
+        private ConnectionDescription CopyConnection(ConnectionDescription source)
+        {
+            var newConnection = _knownConnections.CreateFromProfile(source.ConnectionTypeName);
+
+            newConnection.Name = source.Name + " (Копия)";
+
+            foreach (var oldParam in source.Parameters)
+            {
+                var copyParam = newConnection.Parameters.FirstOrDefault(p => p.Name == oldParam.Name);
+                if (copyParam != null)
+                {
+                    copyParam.Value = oldParam.Value;
+                }
+            }
+
+            return newConnection;
         }
 
         public ICommand DeleteObjectCommand
@@ -210,8 +240,7 @@ namespace AutoPuTTY.Desktop
                 index = pair.Group.ConnectionViewModels.IndexOf(obj);
             }
 
-            pair.Group.ConnectionViewModels.Remove(pair.Connection);
-            pair.Group.Source.Connections.Remove(pair.Connection.Source);
+            pair.Group.RemoveConnection(pair.Connection);
 
             if (isSelected)
             {
