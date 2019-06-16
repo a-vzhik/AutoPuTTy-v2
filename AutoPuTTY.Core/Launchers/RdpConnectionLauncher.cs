@@ -35,10 +35,9 @@ namespace AutoPuTTY.Core.Launchers
                 var outputFolderParam = _connection.Parameters.FirstOrDefault(p => p.Name == "OutputFolder");
                 if (outputFolderParam != null && !string.IsNullOrEmpty(outputFolderParam.Value))
                 {
+                    Directory.CreateDirectory(Path.GetDirectoryName(outputFolderParam.Value));
                     outputFile = Path.Combine(outputFolderParam.Value, outputFile);
                 }
-
-                Directory.CreateDirectory(Path.GetDirectoryName(outputFile));
 
                 TextWriter rdpFileWriter = new StreamWriter(path: outputFile);
 
