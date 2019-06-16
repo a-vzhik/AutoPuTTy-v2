@@ -27,6 +27,23 @@ namespace AutoPuTTY.Desktop
             AddConnection(RAdmin());
             AddConnection(TeamViewer());
             AddConnection(Ammy());
+            AddConnection(NetCat());
+        }
+        public void MergeProfile(ConnectionDescription profile)
+        {
+            ConnectionDescription existingProfile;
+            if (_knownConnectionProfiles.TryGetValue(profile.ConnectionTypeName, out existingProfile))
+            {
+                existingProfile.AppPath = profile.AppPath;
+                foreach (var newParam in profile.Parameters)
+                {
+                    existingProfile.UpdateParameterIfExists(newParam.Name, newParam.Value);
+                }
+            }
+            else
+            {
+                _knownConnectionProfiles[profile.ConnectionTypeName] = profile;
+            }
         }
 
         public ConnectionDescription CreateFromProfile(string name)
@@ -57,9 +74,6 @@ namespace AutoPuTTY.Desktop
         {
             _knownConnectionProfiles.Add(cd.ConnectionTypeName, cd);
         }
-
-
-        
 
         public static ConnectionDescription Rdp()
         {
@@ -487,6 +501,46 @@ namespace AutoPuTTY.Desktop
             };
 
             return sshConnection;
+        }
+
+        public static ConnectionDescription NetCat()
+        {
+            var connection = new ConnectionDescription();
+            connection.AppPath = "nc64.exe";
+            connection.ConnectionTypeName = "NetCat";
+            connection.Name = "My Netcat";
+            connection.IsPaused = true;
+            connection.Parameters = new ConnectionParameterBase[]
+            {
+                new SwitchConnectionParameter()
+                {
+                    Name = "Flags",
+                    IsHidden = true,
+                    OnValue = "-zv",
+                    IsOn = true,
+                    OffValue = string.Empty,
+                },
+
+                new StringConnectionParameter()
+                {
+                    Name = KnownParameters.Host,
+                    DisplayName = "Хост",
+                    CmdLineName = "",
+                    Delimiter = "",
+                    Value = "",
+                },
+
+                new StringConnectionParameter()
+                {
+                    Name = KnownParameters.Port,
+                    DisplayName = "Порт",
+                    CmdLineName = "",
+                    Delimiter = " ",
+                    Value = ""
+                }
+            };
+
+            return connection;
         }
 
         public static ConnectionDescription Ammy()

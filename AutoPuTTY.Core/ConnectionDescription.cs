@@ -59,6 +59,9 @@ namespace AutoPuTTY.Core
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
         public bool IsPaused { get; set; }
 
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public bool IsAutoCheckEnabled { get; set; }
+
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore, NullValueHandling = NullValueHandling.Ignore)]
         public string ParameterDelimiter { get; set; }
 
@@ -66,5 +69,20 @@ namespace AutoPuTTY.Core
 
         [JsonIgnore]
         public Uri IconUri { get; set; }
+
+        public void UpdateParameterIfExists(string name, string value)
+        {
+            var param = Parameters.FirstOrDefault(p => p.Name == name);
+            if (param != null)
+            {
+                param.Value = value;
+            }
+        }
+
+        public string FindParam(string paramName)
+        {
+            var param = Parameters.FirstOrDefault(p => p.Name == paramName);
+            return param != null ? param.Value : string.Empty;
+        }
     }
 }

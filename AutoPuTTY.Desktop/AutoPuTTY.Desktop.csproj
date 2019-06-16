@@ -75,6 +75,7 @@
     <Compile Include="ServerElement.cs" />
     <Compile Include="Repository\NewRepositoryReader.cs" />
     <Compile Include="Repository\OldRepositoryReader.cs" />
+    <Compile Include="Services\NetworkService.cs" />
     <Compile Include="TreeViewBehavior.cs" />
     <Compile Include="xmlHelper.cs" />
     <Page Include="CommonResources.xaml">
@@ -197,8 +198,7 @@
     <Resource Include="Images\closed.png" />
     <Resource Include="Images\closeh.png" />
     <Resource Include="Images\gray-icon.png" />
-    <Resource Include="Images\greed-icon.png" />
-    <Resource Include="Images\green-icon.bmp" />
+    <Resource Include="Images\green-icon.png" />
     <Resource Include="Images\iconadd.png" />
     <Resource Include="Images\icondelete.png" />
     <Resource Include="Images\iconeyehide.png" />

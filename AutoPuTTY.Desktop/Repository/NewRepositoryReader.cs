@@ -25,9 +25,8 @@ namespace AutoPuTTY.Repository
                 var text = File.ReadAllText(profilesFile);
                 var profiles = JsonConvert.DeserializeObject<Dictionary<string, ConnectionDescription>>(text);
 
-                _knownConnections._knownConnectionProfiles.Clear();
                 foreach (var p in profiles)
-                    _knownConnections._knownConnectionProfiles[p.Key] = p.Value;
+                    _knownConnections.MergeProfile(p.Value);
             }
         }
 
@@ -50,12 +49,13 @@ namespace AutoPuTTY.Repository
                     {
                         var connectionDescription = _knownConnections.CreateFromProfile(ci.ConnectionTypeName);
                         connectionDescription.Name = ci.ConnectionName;
-                        var giParamMap = ci.Parameters.ToDictionary(p => p.Name, p => p.Value);
+                        connectionDescription.IsAutoCheckEnabled = ci.IsAutoCheckEnabled;
+                        var ciParamMap = ci.Parameters.ToDictionary(p => p.Name, p => p.Value);
                         foreach (var profileParam in connectionDescription.Parameters)
                         {
-                            if (giParamMap.ContainsKey(profileParam.Name))
+                            if (ciParamMap.ContainsKey(profileParam.Name))
                             {
-                                profileParam.Value = giParamMap[profileParam.Name];
+                                profileParam.Value = ciParamMap[profileParam.Name];
                             }
                         };
 
@@ -87,6 +87,7 @@ namespace AutoPuTTY.Repository
                         .Select(c => new ConnectionInstance
                         {
                             ConnectionName = c.Name,
+                            IsAutoCheckEnabled = c.IsAutoCheckEnabled,
                             ConnectionTypeName = c.ConnectionTypeName,
                             Parameters = c.Parameters
                                 .Where(p => !string.IsNullOrEmpty(p.Value))

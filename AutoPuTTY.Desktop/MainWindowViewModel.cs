@@ -310,11 +310,24 @@ namespace AutoPuTTY.Desktop
             {
                 if (_selectedObject != value)
                 {
+                    ToogleStateForSelectedObject(false);
+
                     _selectedObject = value;
                     ViewModelCommandHelper.Invalidate(_createConnectionCommand);
                     RaisePropertyChanged(nameof(SelectedObject));
                     SelectedObjectChanged?.Invoke(this, EventArgs.Empty);
+
+                    ToogleStateForSelectedObject(true);
                 }
+            }
+        }
+
+        private void ToogleStateForSelectedObject(bool state)
+        {
+            var cdvm = SelectedObject as ConnectionDescriptionViewModel;
+            if (cdvm != null)
+            {
+                cdvm.IsSelected = state;
             }
         }
 
@@ -322,7 +335,7 @@ namespace AutoPuTTY.Desktop
         {
             get
             {
-                return _knownConnections._knownConnectionProfiles.Keys;
+                return _knownConnections._knownConnectionProfiles.Keys.Except(new[] { "NetCat" });
             }
         }
 

@@ -113,6 +113,10 @@
                 <KeyBinding Key="Return" 
                             Command="{Binding Path=RunConnectionCommand}" 
                             CommandParameter="{Binding SelectedObject}" />
+                <KeyBinding Key="C" 
+                            Modifiers="Ctrl"
+                            Command="{Binding Path=CopyConnectionCommand}" 
+                            CommandParameter="{Binding SelectedObject}" />                
             </TreeView.InputBindings>
         </TreeView>
 

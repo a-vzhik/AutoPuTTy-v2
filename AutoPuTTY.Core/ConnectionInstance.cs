@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace AutoPuTTY.Core
 {
@@ -10,6 +7,8 @@ namespace AutoPuTTY.Core
         public string ConnectionTypeName { get; set; }
 
         public string ConnectionName { get; set; }
+
+        public bool IsAutoCheckEnabled { get; set; }
 
         public IList<ConnectionParameterIntance> Parameters { get; set; }
     }

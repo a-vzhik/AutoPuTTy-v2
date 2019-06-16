@@ -46,6 +46,7 @@ namespace AutoPuTTY.Repository
             { KnownConnections.WinScpScp().ConnectionTypeName, "winscp"},
             { KnownConnections.WinScpFtp().ConnectionTypeName, "winscp"},
             { KnownConnections.WinScpSftp().ConnectionTypeName, "winscp"},
+            { KnownConnections.NetCat().ConnectionTypeName, "ncpath"},
         };
  
         private readonly XmlHelper _xmlHelper;
