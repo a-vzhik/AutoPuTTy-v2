@@ -30,8 +30,9 @@ namespace AutoPuTTY.Core.Launchers
 
                 var vncFilePath = OtherHelper.ReplaceU(f, _connection.Name) + ".vnc";
                 var vncOutPathParam = _connection.Parameters.First(p => p.Name == "OutputFolder");
-                if (vncOutPathParam != null && Directory.Exists(vncOutPathParam.Value))
+                if (vncOutPathParam != null && !string.IsNullOrEmpty(vncOutPathParam.Value))
                 {
+                    Directory.CreateDirectory(vncOutPathParam.Value);
                     vncFilePath = Path.Combine(vncOutPathParam.Value, vncFilePath);
                 }
                 TextWriter vncFile = new StreamWriter(vncFilePath);
