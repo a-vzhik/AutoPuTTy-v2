@@ -19,6 +19,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="40" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />            
             <RowDefinition Height="Auto" />
             <RowDefinition />
             <RowDefinition Height="Auto"/>
@@ -30,7 +31,7 @@
         <TextBlock TextElement.FontWeight="Bold"
                    Margin="10 0">
             <Run Text="Редактрирование подключения " /> 
-            <Run Text="{Binding Source.ConnectionTypeName}" />
+            <Run Text="{Binding SelectedConnectionType}" />
         </TextBlock>
         <Grid Margin="10 0 3 10"
               Grid.Row="1">
@@ -45,12 +46,26 @@
             <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
                      Grid.Column="2"/>
         </Grid>
+        <Grid Margin="10 0 3 10"
+              Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Тип подключения"
+                       FontWeight="Bold"
+                       HorizontalAlignment="Right"/>
+            <ComboBox ItemsSource="{Binding ConnectionTypes}"
+                      SelectedValue="{Binding SelectedConnectionType}"
+                      Grid.Column="2"/>
+        </Grid>        
         <TextBlock Text="Параметры подключения" 
                    TextElement.FontWeight="Bold"
                    Margin="10 0 0 0"
-                   Grid.Row="2"/>
+                   Grid.Row="3"/>
         <ItemsControl ItemsSource="{Binding ParameterViewModels}"
-                      Grid.Row="3"
+                      Grid.Row="4"
                       Margin="10 0 0 0">
             <ItemsControl.ItemContainerStyle>
                 <Style TargetType="FrameworkElement">
@@ -73,11 +88,11 @@
         
         <CheckBox IsChecked="{Binding IsAutoCheckEnabled}" 
                   Content="Авто проверка хоста и порта"
-                  Grid.Row="4"
+                  Grid.Row="5"
                   Margin="10 0 0 0"/>        
 
         <UniformGrid Columns="4"
-                     Grid.Row="6"
+                     Grid.Row="7"
                      Margin="0 0 0 5">
             <Button Margin="10 0"
                     Command="{Binding PingCommand}">
@@ -107,7 +122,7 @@
 
         <TextBox Text="{Binding CommandLineText, Mode=OneWay}"
                  AcceptsReturn="True"
-                 Grid.Row="8"
+                 Grid.Row="9"
                  IsReadOnly="True"
                  TextWrapping="Wrap">
             

@@ -70,5 +70,18 @@ namespace AutoPuTTY.Core
         public IList<ConnectionParameterBase> Parameters { get; set; }
 
         public IList<ConnectionGroup> Groups { get; set; }
+
+        public bool ReplaceConnection(ConnectionDescription oldConnection, ConnectionDescription newConnection)
+        {
+            var oldIndex = Connections.IndexOf(oldConnection);
+            if (oldIndex >= 0)
+            {
+                Connections.RemoveAt(oldIndex);
+                Connections.Insert(oldIndex, newConnection);
+                return true;
+            }
+
+            return false;
+        }
     }
 }

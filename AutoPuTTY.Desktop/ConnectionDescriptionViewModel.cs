@@ -35,6 +35,8 @@ namespace AutoPuTTY.Desktop
         private Task _updatePingAccessibilityTask;
         private Task _updatePortAccessibilityTask;
         private bool _isSelected;
+        private readonly NetworkService _networkService;
+        private ConnectionParameterViewModelFactory _connectionParameterViewModelFactory;
 
         public ConnectionDescriptionViewModel(
             ConnectionDescription source,
@@ -46,26 +48,41 @@ namespace AutoPuTTY.Desktop
             Parent = parent;
             _knownConnections = knownConnections;
             _fileSelector = fileSelector;
-            Source = source;
-            Name = source.Name;
-            ParameterViewModels = source.Parameters
-                .Select(p => connectionParameterViewModelFactory.Create(p))
-                .ToList();
 
             _autoCheckTimer = new Timer(1000);
             _autoCheckTimer.Elapsed += AutoCheckTimer_Elapsed;
             _uiScheduler = TaskScheduler.FromCurrentSynchronizationContext();
             _networkService = new NetworkService();
+            _connectionParameterViewModelFactory = connectionParameterViewModelFactory;
+
+            PingAccessibilityIconUri = new Uri("pack://application:,,,/Images/gray-icon.png");
+            PortAccessibilityIconUri = new Uri("pack://application:,,,/Images/gray-icon.png");
+
+            InitFromSource(source);
+
+            ConnectionTypes = _knownConnections._knownConnectionProfiles.Keys.Except(new[] { "NetCat" }).ToList();
+            SelectedConnectionType = Source.ConnectionTypeName;
+        }
+
+        private void InitFromSource(ConnectionDescription source)
+        {
+            Source = source;
+            Name = source.Name;
+
+            ParameterViewModels = source.Parameters
+                .Select(p => _connectionParameterViewModelFactory.Create(p))
+                .ToList();
+            RaisePropertyChanged(nameof(ParameterViewModels));
 
             foreach (var pvm in ParameterViewModels.OfType<ObservableObject>())
             {
                 pvm.PropertyChanged += ParameterViewModel_PropertyChanged;
             }
 
-            PingAccessibilityIconUri = new Uri("pack://application:,,,/Images/gray-icon.png");
-            PortAccessibilityIconUri = new Uri("pack://application:,,,/Images/gray-icon.png");
-            IsAutoCheckEnabled = Source.IsAutoCheckEnabled;
             UpdateCommandLineText();
+            IsAutoCheckEnabled = Source.IsAutoCheckEnabled;
+
+            RaisePropertyChanged(nameof(IconUri));
         }
 
         private void AutoCheckTimer_Elapsed(object sender, ElapsedEventArgs e)
@@ -223,9 +240,7 @@ namespace AutoPuTTY.Desktop
             new ConnectionLauncherProvider().GetLauncher(connection).Run();
         }
 
-        public IList<object> ParameterViewModels { get; }
-
-        private readonly NetworkService _networkService;
+        public IList<object> ParameterViewModels { get; private set; }
 
         public Uri IconUri => KnownConnections.GetIconUrl(Source.ConnectionTypeName);
 
@@ -261,6 +276,40 @@ namespace AutoPuTTY.Desktop
             {
                 ConnectionCmdLineGenerator gen = new ConnectionCmdLineGenerator(Source);
                 return gen.GetCommandLine();
+            }
+        }
+
+        public IList<string> ConnectionTypes
+        {
+            get;
+            private set;
+        }
+
+        public string SelectedConnectionType
+        {
+            get
+            {
+                return Source.ConnectionTypeName;
+            }
+            set
+            {
+                if (Source.ConnectionTypeName != value)
+                {
+                    Source.ConnectionTypeName = value;
+
+                    var newConnection = _knownConnections.CreateFromProfile(value);
+                    newConnection.Name = Source.Name;
+                    newConnection.UpdateParameterIfExists(KnownParameters.Host, Source.FindParam(KnownParameters.Host));
+                    newConnection.UpdateParameterIfExists(KnownParameters.Port, Source.FindParam(KnownParameters.Port));
+                    newConnection.UpdateParameterIfExists(KnownParameters.User, Source.FindParam(KnownParameters.User));
+                    newConnection.UpdateParameterIfExists(KnownParameters.Password, Source.FindParam(KnownParameters.Password));
+
+                    Parent.Source.ReplaceConnection(Source, newConnection);
+                        
+                    InitFromSource(newConnection);
+                    RaisePropertyChanged(nameof(SelectedConnectionType));
+
+                }
             }
         }
 

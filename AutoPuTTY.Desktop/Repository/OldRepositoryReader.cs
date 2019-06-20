@@ -251,7 +251,7 @@ namespace AutoPuTTY.Repository
             {
                 connection.Name = server.Name;
                 PatchCommonParameters(connection.Parameters, 
-                    () => server.Host, () => server.Port, () => server.Name, () => server.Password);
+                    () => server.Host, () => server.Port, () => server.Username, () => server.Password);
             }
             return connection;
         }

@@ -3,8 +3,6 @@ using AutoPuTTY.Desktop.Data;
 using AutoPuTTY.Desktop.Input;
 using AutoPuTTY.Desktop.Parameters;
 using AutoPuTTY.Repository;
-using AutoPuTTY.Utils;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
