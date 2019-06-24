@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Timers;
+using System.Windows;
 using System.Windows.Input;
 
 using Timer = System.Timers.Timer;
@@ -31,7 +32,7 @@ namespace AutoPuTTY.Desktop
         private object _selectedObject;
         private readonly Timer _timer;
 
-        SynchronizationContext _context = SynchronizationContext.Current;
+        private readonly SynchronizationContext _context = SynchronizationContext.Current;
 
         private DelegateCommand<ConnectionDescriptionViewModel> _runConnectionCommand;
         private DelegateCommand<ConnectionDescriptionViewModel> _copyConnectionCommand;
@@ -41,22 +42,7 @@ namespace AutoPuTTY.Desktop
             _knownConnections = new KnownConnections();
             ConnectionGroupViewModels = new ObservableCollection<ConnectionGroupViewModel>();
 
-            var newRepo = new NewRepositoryReader(_knownConnections);
-            newRepo.LoadProfiles("profiles.json");
-
-            var oldRepo = new OldRepositoryReader("autoputty.xml", _knownConnections);
-            var groups = oldRepo.Load();
-
-            if (groups != null)
-            {
-                newRepo.SaveProfiles(ProfilesFile, _knownConnections._knownConnectionProfiles);
-                newRepo.Save(ConnectionsFile, groups);
-            }
-            else
-            {
-                groups = newRepo.Load(ConnectionsFile);
-            }
-
+            var groups = Load();
             if (groups != null)
             {
                 foreach (var gr in groups)
@@ -71,6 +57,54 @@ namespace AutoPuTTY.Desktop
             _timer.Interval = 30000;
             _timer.Elapsed += Timer_Elapsed;
             _timer.Enabled = true;
+        }
+
+        private List<ConnectionGroup> Load()
+        {
+            var newRepo = new NewRepositoryReader(_knownConnections);
+            try
+            {
+                newRepo.LoadProfiles("profiles.json");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка загрузки {ProfilesFile}: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+            var groups = TryLoadOldRepo();
+
+            if (groups != null)
+            {
+                newRepo.SaveProfiles(ProfilesFile, _knownConnections._knownConnectionProfiles);
+                newRepo.Save(ConnectionsFile, groups);
+            }
+            else
+            {
+                try
+                {
+                    groups = newRepo.Load(ConnectionsFile);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Ошибка загрузки {ConnectionsFile}: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+
+            return groups;
+        }
+
+        private List<ConnectionGroup> TryLoadOldRepo()
+        {
+            var oldRepo = new OldRepositoryReader("autoputty.xml", _knownConnections);
+            try
+            {
+                return oldRepo.Load();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Ошибка загрузки старого конфигурационного файла: " + ex.Message, "Ошибка",  MessageBoxButton.OK, MessageBoxImage.Error);
+                return null;
+            }
         }
 
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
