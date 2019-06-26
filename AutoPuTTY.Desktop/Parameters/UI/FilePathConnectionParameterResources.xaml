@@ -13,7 +13,8 @@
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
             <TextBlock Text="{Binding Source.DisplayName}"
-                   HorizontalAlignment="Right"/>
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Right"/>
             <DockPanel Grid.Column="2"
                        LastChildFill="True">
                 <Button Command="{Binding SelectFileCommand}"
@@ -24,8 +25,7 @@
                         ToolTip="Очистить путь"
                         Style="{StaticResource IconButtonStyle}"
                         DockPanel.Dock="Right"/>
-                <TextBox IsReadOnly="True"
-                         Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}"
+                <TextBox Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}"
                          Margin="0 0 2 0"/>
             </DockPanel>
         </Grid>

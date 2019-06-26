@@ -1,0 +1,22 @@
+﻿<Window x:Class="AutoPuTTY.Desktop.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:AutoPuTTY.Desktop"
+        Title="Настройки профилей"
+        Height="250"
+        Name="Root"
+        FontSize="12"
+        Width="500">
+    <TabControl ItemsSource="{Binding Values}">
+        <TabControl.ItemTemplate>
+            <DataTemplate DataType="local:ProfileSettingViewModel">
+                <TextBlock Text="{Binding Title}"/>
+            </DataTemplate>
+        </TabControl.ItemTemplate>
+        <TabControl.ContentTemplate>
+            <DataTemplate>
+                <local:ProfileSettingsView DataContext="{Binding}"/>
+            </DataTemplate>
+        </TabControl.ContentTemplate>
+    </TabControl>
+</Window>

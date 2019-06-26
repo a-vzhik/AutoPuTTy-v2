@@ -10,7 +10,8 @@
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
             <TextBlock Text="{Binding Source.DisplayName}"
-                       HorizontalAlignment="Right"/>
+                       HorizontalAlignment="Right"
+                       VerticalAlignment="Center"/>
             <TextBox Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}"
                              Grid.Column="2"/>
         </Grid>

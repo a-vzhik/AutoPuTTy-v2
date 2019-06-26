@@ -1,0 +1,38 @@
+﻿<UserControl x:Class="AutoPuTTY.Desktop.ProfileSettingsView"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             >
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Parameters/UI/PasswordConnectionParameterResources.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Parameters/UI/StringConnectionParameterResources.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Parameters/UI/SwitchConnectionParameterResources.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Parameters/UI/PredefinedConnectionParameterResources.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Parameters/UI/FilePathConnectionParameterResources.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Parameters/UI/FolderPathConnectionParameterResources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="10" />
+            <RowDefinition Height="Auto"  />
+            <RowDefinition Height="5"  />
+            <RowDefinition Height="Auto"  />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="{Binding Title, StringFormat={}Редактирование профиля {0}}" 
+                   FontWeight="Bold" 
+                   Grid.Row="1"
+                   HorizontalAlignment="Center"/>
+
+        <ContentPresenter Content="{Binding AppPathParameterViewModel}" 
+                          Grid.Row="3"/>
+        <ContentPresenter Content="{Binding OutputFolderParameterViewModel}" 
+                          Grid.Row="5"/>
+    </Grid>
+</UserControl>

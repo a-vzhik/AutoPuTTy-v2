@@ -71,11 +71,18 @@
     <Compile Include="Parameters\FilePathConnectionParameterViewModel.cs" />
     <Compile Include="Parameters\PasswordConnectionParameterViewModel.cs" />
     <Compile Include="Parameters\UI\PasswordBoxBehavior.cs" />
+    <Compile Include="ProfileSettingsView.xaml.cs">
+      <DependentUpon>ProfileSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ProfileSettingsViewModel.cs" />
     <Compile Include="SelectFileView.cs" />
     <Compile Include="ServerElement.cs" />
     <Compile Include="Repository\NewRepositoryReader.cs" />
     <Compile Include="Repository\OldRepositoryReader.cs" />
     <Compile Include="Services\NetworkService.cs" />
+    <Compile Include="SettingsWindow.xaml.cs">
+      <DependentUpon>SettingsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TreeViewBehavior.cs" />
     <Compile Include="xmlHelper.cs" />
     <Page Include="CommonResources.xaml">
@@ -140,6 +147,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Parameters\UI\SwitchConnectionParameterResources.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ProfileSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

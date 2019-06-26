@@ -13,7 +13,8 @@
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
             <TextBlock Text="{Binding Source.DisplayName}"
-                   HorizontalAlignment="Right"/>
+                       HorizontalAlignment="Right"
+                       VerticalAlignment="Center"/>
             <DockPanel Grid.Column="2"
                        LastChildFill="True">
                 <Button Command="{Binding SelectFolderCommand}"

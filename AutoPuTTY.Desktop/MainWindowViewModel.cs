@@ -36,6 +36,7 @@ namespace AutoPuTTY.Desktop
 
         private DelegateCommand<ConnectionDescriptionViewModel> _runConnectionCommand;
         private DelegateCommand<ConnectionDescriptionViewModel> _copyConnectionCommand;
+        private DelegateCommand _showSettingsCommand;
 
         public MainWindowViewModel()
         {
@@ -220,6 +221,31 @@ namespace AutoPuTTY.Desktop
                 }
 
                 return _copyConnectionCommand;
+            }
+        }
+
+        public ICommand ShowSettingsCommand
+        {
+            get
+            {
+                if (_showSettingsCommand == null)
+                {
+                    _showSettingsCommand = new DelegateCommand(() =>
+                    {
+                        new SettingsWindow(_knownConnections).ShowDialog();
+                        //var window = new Window();
+                        //var settingsVM = new ProfileSettingsViewModel(_knownConnections._knownConnectionProfiles["SSH"]);
+                        //var view = new ProfileSettingsView();
+                        //view.DataContext = settingsVM;
+
+
+                        //window.Content = view;
+                        //window.ShowDialog();
+
+                    });
+                }
+
+                return _showSettingsCommand;
             }
         }
 

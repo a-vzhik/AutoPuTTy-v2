@@ -11,7 +11,8 @@
             </Grid.ColumnDefinitions>
 
             <TextBlock Text="{Binding Source.DisplayName}"
-                       HorizontalAlignment="Right"/>
+                       HorizontalAlignment="Right"
+                       VerticalAlignment="Center"/>
             <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay}"
                   Grid.Column="2"/>
         </Grid>
