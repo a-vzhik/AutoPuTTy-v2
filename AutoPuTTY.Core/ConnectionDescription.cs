@@ -54,6 +54,8 @@ namespace AutoPuTTY.Core
 
         public string ConnectionTypeName { get; set; }
 
+        public string Description { get; set; }
+
         public string AppPath { get; set; }
 
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]

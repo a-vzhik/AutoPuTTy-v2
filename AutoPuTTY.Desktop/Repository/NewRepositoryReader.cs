@@ -49,6 +49,7 @@ namespace AutoPuTTY.Repository
                     {
                         var connectionDescription = _knownConnections.CreateFromProfile(ci.ConnectionTypeName);
                         connectionDescription.Name = ci.ConnectionName;
+                        connectionDescription.Description = ci.Description;
                         connectionDescription.IsAutoCheckEnabled = ci.IsAutoCheckEnabled;
                         var ciParamMap = ci.Parameters.ToDictionary(p => p.Name, p => p.Value);
                         foreach (var profileParam in connectionDescription.Parameters)
@@ -87,6 +88,7 @@ namespace AutoPuTTY.Repository
                         .Select(c => new ConnectionInstance
                         {
                             ConnectionName = c.Name,
+                            Description = c.Description,
                             IsAutoCheckEnabled = c.IsAutoCheckEnabled,
                             ConnectionTypeName = c.ConnectionTypeName,
                             Parameters = c.Parameters

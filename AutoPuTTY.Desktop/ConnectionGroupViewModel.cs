@@ -112,5 +112,10 @@ namespace AutoPuTTY.Desktop
             private set;
         }
 
+        public override string ToString()
+        {
+            return $"Группа {this.Source.Name}";
+        }
+
     }
 }

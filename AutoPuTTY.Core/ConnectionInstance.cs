@@ -8,6 +8,8 @@ namespace AutoPuTTY.Core
 
         public string ConnectionName { get; set; }
 
+        public string Description { get; set; }
+
         public bool IsAutoCheckEnabled { get; set; }
 
         public IList<ConnectionParameterIntance> Parameters { get; set; }

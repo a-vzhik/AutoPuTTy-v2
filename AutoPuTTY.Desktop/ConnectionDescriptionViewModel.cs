@@ -37,6 +37,7 @@ namespace AutoPuTTY.Desktop
         private bool _isSelected;
         private readonly NetworkService _networkService;
         private ConnectionParameterViewModelFactory _connectionParameterViewModelFactory;
+        private string _description;
 
         public ConnectionDescriptionViewModel(
             ConnectionDescription source,
@@ -68,6 +69,7 @@ namespace AutoPuTTY.Desktop
         {
             Source = source;
             Name = source.Name;
+            Description = source.Description;
 
             ParameterViewModels = source.Parameters
                 .Select(p => _connectionParameterViewModelFactory.Create(p))
@@ -116,6 +118,20 @@ namespace AutoPuTTY.Desktop
                 _name = value;
                 Source.Name = value;
                 RaisePropertyChanged(nameof(Name));
+            }
+        }
+
+        public string Description
+        {
+            get
+            {
+                return _description; 
+            }
+            set
+            {
+                _description = value;
+                Source.Description = value;
+                RaisePropertyChanged(nameof(Description));
             }
         }
 
@@ -377,6 +393,11 @@ namespace AutoPuTTY.Desktop
                             : new Uri("pack://application:,,,/Images/green-icon.png");
                     }
                 }, _uiScheduler);
+        }
+
+        public override string ToString()
+        {
+            return $"Подключение {Source.Name} ({Source.ConnectionTypeName})";
         }
     }
 }

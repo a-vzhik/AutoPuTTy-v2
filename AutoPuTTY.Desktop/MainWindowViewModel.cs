@@ -27,7 +27,7 @@ namespace AutoPuTTY.Desktop
 
         private DelegateCommand _createGroupCommand;
 
-        private DelegateCommand<string> _createConnectionCommand;
+        private DelegateCommand _createConnectionCommand;
         private DelegateCommand<object> _deleteObjectCommand;
         private object _selectedObject;
         private readonly Timer _timer;
@@ -160,12 +160,12 @@ namespace AutoPuTTY.Desktop
             {
                 if (_createConnectionCommand == null)
                 {
-                    _createConnectionCommand = new DelegateCommand<string>(connectionType =>
+                    _createConnectionCommand = new DelegateCommand(() =>
                     {
                         var selectedGroup = (ConnectionGroupViewModel)SelectedObject;
                         selectedGroup.IsExpanded = true;
 
-                        var connection = _knownConnections.CreateFromProfile(connectionType);
+                        var connection = _knownConnections.CreateFromProfile(_knownConnections._knownConnectionProfiles.Keys.First());
                         connection.Name = $"Новое подключение {connection.ConnectionTypeName}";
 
                         foreach (var groupParam in selectedGroup.Source.Parameters)
@@ -183,8 +183,7 @@ namespace AutoPuTTY.Desktop
                         var viewModel = selectedGroup.AddConnection(connection);
                         SelectedObject = viewModel;
                     }, 
-                    _ => SelectedObject is ConnectionGroupViewModel,
-                    true);
+                    () => SelectedObject is ConnectionGroupViewModel);
                 }
 
                 return _createConnectionCommand;
@@ -275,6 +274,11 @@ namespace AutoPuTTY.Desktop
                 {
                     _deleteObjectCommand = new DelegateCommand<object>(obj =>
                     {
+                        if (MessageBox.Show($"Вы точно хотите удалить: {obj.ToString()}?", "", MessageBoxButton.YesNo, MessageBoxImage.Question) != MessageBoxResult.Yes)
+                        {
+                            return;
+                        }
+
                         if (obj is ConnectionGroupViewModel)
                         {
                             DeleteGroup((ConnectionGroupViewModel)obj);
@@ -386,14 +390,6 @@ namespace AutoPuTTY.Desktop
             if (cdvm != null)
             {
                 cdvm.IsSelected = state;
-            }
-        }
-
-        public IEnumerable<string> ConnectionTypes
-        {
-            get
-            {
-                return _knownConnections._knownConnectionProfiles.Keys.Except(new[] { "NetCat" });
             }
         }
 

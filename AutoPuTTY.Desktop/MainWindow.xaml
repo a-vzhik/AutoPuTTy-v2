@@ -22,12 +22,25 @@
         </Grid.ColumnDefinitions>
         
         <Grid.RowDefinitions>
-            <RowDefinition Height="10"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition></RowDefinition>
             <RowDefinition Height="10"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
 
+        <ToolBar Grid.ColumnSpan="3"
+                 ToolBarTray.IsLocked="True"
+                 Background="Transparent">
+            <Button Command="{Binding ShowSettingsCommand}" 
+                    Margin="3">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="pack://application:,,,/Images/iconoptions.png"/>
+                    <TextBlock Text="Настройки"
+                               Margin="5 0 0 0"/>
+                </StackPanel>
+            </Button>
+        </ToolBar>
+        
         <TreeView ItemsSource="{Binding ConnectionGroupViewModels}"
                   SelectedItemChanged="TreeView_SelectedItemChanged"
                   Name="TreeView"
@@ -36,7 +49,7 @@
                 <HierarchicalDataTemplate DataType="{x:Type local:ConnectionGroupViewModel}"
                                           ItemsSource="{Binding ConnectionViewModels}">
                     <StackPanel Orientation="Horizontal">
-                        <Image Source="{Binding IconUri}" Width="24" Height="24" Margin="0 1 4 1" 
+                        <Image Source="{Binding IconUri}" Width="16" Height="16" Margin="0 1 4 1" 
                                                                KeyboardNavigation.DirectionalNavigation="None"
                                 KeyboardNavigation.IsTabStop="False"/>
                         <TextBlock Text="{Binding Name}"
@@ -61,7 +74,7 @@
                                           CommandParameter="{Binding}" />
 
                         </StackPanel.InputBindings>
-                        <Image Source="{Binding IconUri}" Width="24" Height="24" Margin="0 1 4 1" 
+                        <Image Source="{Binding IconUri}" Width="16" Height="16" Margin="0 1 4 1" 
                                                                KeyboardNavigation.DirectionalNavigation="None"
                                 KeyboardNavigation.IsTabStop="False"/>
                         <TextBlock Text="{Binding Name}"
@@ -132,42 +145,11 @@
             <Button Content="Создать группу"
                     Command="{Binding CreateGroupCommand}"
                     Margin="0 0 0 10"></Button>
-            <!--<Button Content="Создать подключение"
-                    Command="{Binding CreateConnectionCommand}"></Button>-->
-            <ComboBox ItemsSource="{Binding ConnectionTypes}"
-                      Text="Создать подключение...">
-                <ComboBox.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel Width="500"/>
-                    </ItemsPanelTemplate>
-                </ComboBox.ItemsPanel>
-                <ComboBox.ItemContainerStyle>
-                    <Style TargetType="ComboBoxItem">
-                        <Setter Property="Margin"
-                                Value="10"/>
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="ComboBoxItem">
-                                    <ContentPresenter />
-                                </ControlTemplate>
-                            </Setter.Value>
+            <Button Content="Создать подключение"
+                    Command="{Binding CreateConnectionCommand}">
 
-                        </Setter>
-                    </Style>
-                </ComboBox.ItemContainerStyle>
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <Button Content="{Binding}"
-                                Width="130"
-                                Padding="10 5"
-                                Command="{Binding DataContext.CreateConnectionCommand, ElementName=Root}"
-                                CommandParameter="{Binding}"/>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
-            <Button Content="Настройки"
-                    Command="{Binding ShowSettingsCommand}"
-                    Margin="0 10 0 0"></Button>            
+            </Button>
+            
         </StackPanel>
 
         <ContentPresenter Content="{Binding SelectedObject}"
