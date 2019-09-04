@@ -1,4 +1,5 @@
-﻿using AutoPuTTY.Utils;
+﻿using AutoPuTTY.Core.Parameters;
+using AutoPuTTY.Utils;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -41,9 +42,15 @@ namespace AutoPuTTY.Core.Launchers
 
                 TextWriter rdpFileWriter = new StreamWriter(path: outputFile);
 
-                foreach (var p in parameters)
+                foreach (var p in parameters.Where(p => !(p is FolderPathConnectionParameter)))
                 {
-                    rdpFileWriter.WriteLine(p.GetCommandLine());
+                    var line = p.GetCommandLine();
+                    if (string.IsNullOrEmpty(line)) {
+                        continue;
+                    }
+                    rdpFileWriter.Write(line);
+                    var delimiter = p.NextParameterDelimiter ?? _connection.ParameterDelimiter;
+                    rdpFileWriter.Write(delimiter);
                 }
 
                 rdpFileWriter.WriteLine(sizes.Length == 2 ? "desktopwidth:i:" + sizes[0] : "");
