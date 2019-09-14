@@ -39,7 +39,9 @@
 
         <ItemsControl ItemsSource="{Binding ParameterViewModels}"
                       Grid.Row="2"
-                      Grid.ColumnSpan="3">
+                      Grid.ColumnSpan="3"
+                      KeyboardNavigation.DirectionalNavigation="None"
+                      KeyboardNavigation.IsTabStop="False">
             <ItemsControl.ItemContainerStyle>
                 <Style TargetType="FrameworkElement">
                     <Style.Setters>

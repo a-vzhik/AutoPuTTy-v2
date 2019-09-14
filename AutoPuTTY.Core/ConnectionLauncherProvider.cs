@@ -25,6 +25,11 @@ namespace AutoPuTTY.Core
                 return new TelnetConnectionLauncher(connection);
             }
 
+            if (connection.ConnectionTypeName == "SSH")
+            {
+                return new SshConnectionLauncher(connection, c => new ConnectionCmdLineGenerator(c));
+            }
+
             return new DefaultConnectionLauncher(connection, c => new ConnectionCmdLineGenerator(c));
         }
     }

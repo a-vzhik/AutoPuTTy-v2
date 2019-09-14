@@ -20,6 +20,19 @@ namespace AutoPuTTY.Core
             stringBuilder.AppendFormat("\"{0}\"", _connection.GetEffectiveAppPath());
 
             stringBuilder.Append(" ");
+            stringBuilder.Append(GetArgumentsLine());
+
+            if (_connection.IsPaused)
+            {
+                stringBuilder.AppendFormat(" &pause");
+            }
+
+            return stringBuilder.ToString();
+        }
+
+        public string GetArgumentsLine()
+        {
+            StringBuilder stringBuilder = new StringBuilder(); 
             foreach (var p in _connection.Parameters.OrderBy(p => p.CmdLineOrder))
             {
                 var pcmd = p.GetCommandLine();
@@ -32,12 +45,7 @@ namespace AutoPuTTY.Core
                 }
             }
 
-            if (_connection.IsPaused)
-            {
-                stringBuilder.AppendFormat(" &pause");
-            }
-
             return stringBuilder.ToString();
-        } 
+        }
     }
 }
