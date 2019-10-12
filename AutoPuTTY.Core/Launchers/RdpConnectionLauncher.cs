@@ -29,8 +29,6 @@ namespace AutoPuTTY.Core.Launchers
             if (File.Exists(rdpPath))
             {
                 var parameters = _connection.Parameters.Where(p => p.DisplayName != "Размер экрана").ToList();
-                var size = _connection.Parameters.FirstOrDefault(p => p.DisplayName == "Размер экрана").Value;
-                string[] sizes = size.Split('x');
 
                 var outputFile = OtherHelper.ReplaceU(f, _connection.Name) + ".rdp";
                 var outputFolderParam = _connection.Parameters.FirstOrDefault(p => p.Name == "OutputFolder");
@@ -53,8 +51,15 @@ namespace AutoPuTTY.Core.Launchers
                     rdpFileWriter.Write(delimiter);
                 }
 
-                rdpFileWriter.WriteLine(sizes.Length == 2 ? "desktopwidth:i:" + sizes[0] : "");
-                rdpFileWriter.WriteLine(sizes.Length == 2 ? "desktopheight:i:" + sizes[1] : "");
+                var fullScreen = _connection.Parameters.FirstOrDefault(p => p.Name == "IsFullScreen") as SwitchConnectionParameter;
+                if (fullScreen != null && !fullScreen.IsOn)
+                {
+                    var size = _connection.Parameters.FirstOrDefault(p => p.Name == "ScreenSize").Value;
+                    string[] sizes = size.Split('x');
+
+                    rdpFileWriter.WriteLine(sizes.Length == 2 ? "desktopwidth:i:" + sizes[0] : "");
+                    rdpFileWriter.WriteLine(sizes.Length == 2 ? "desktopheight:i:" + sizes[1] : "");
+                }
 
                 rdpFileWriter.Close();
 
