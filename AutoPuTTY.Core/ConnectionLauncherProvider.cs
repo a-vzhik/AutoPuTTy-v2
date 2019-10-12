@@ -30,6 +30,11 @@ namespace AutoPuTTY.Core
                 return new SshConnectionLauncher(connection, c => new ConnectionCmdLineGenerator(c));
             }
 
+            if (connection.ConnectionTypeName == "TeamViewer")
+            {
+                return new SshConnectionLauncher(connection, c => new ConnectionCmdLineGenerator(c));
+            }
+
             return new DefaultConnectionLauncher(connection, c => new ConnectionCmdLineGenerator(c));
         }
     }
