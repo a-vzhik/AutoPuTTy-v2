@@ -14,10 +14,7 @@ namespace AutoPuTTY.Desktop.Parameters
         public SwitchConnectionParameterViewModel(SwitchConnectionParameter source)
             : base(source)
         {
-            if (source.Value == source.OnValue)
-            {
-                IsSelected = true;
-            }
+            IsSelected = source.Value == source.OnValue;
         }
 
         public bool IsSelected
